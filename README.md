@@ -1,6 +1,6 @@
 # Pawly
 
-Telegram AI pet care assistant. Send a message about your pet → Gemini Flash 2.0 responds with health advice and tracks symptoms over time.
+Telegram AI pet care assistant. Send a message about your pet → Gemini Flash 2.5 responds with health advice and tracks symptoms over time.
 
 ## Stack
 
@@ -85,6 +85,25 @@ docker compose up -d
 
 Runs postgres, redis, app (bot + API on port 8000), and worker.
 
+## Local vs Prod Deploy
+
+Local (development):
+
+```bash
+# Uses .env and exposes postgres/redis ports
+docker compose up -d
+```
+
+Production:
+
+```bash
+# Copy and fill the prod env file
+cp .env.prod.example .env.prod
+
+# Run with prod overrides (no DB/Redis ports exposed)
+docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d
+```
+
 ## Environment Variables
 
 | Variable | Required | Default | Description |
@@ -110,4 +129,7 @@ python -m pytest tests/memory -q
 # End-to-end flow test (requires seed data and GOOGLE_API_KEY)
 python scripts/test_flow.py
 ```
+
+## Continuous Integration
+Changes pushed to `main` or opened via PR now trigger `.github/workflows/ci.yml`, which installs Python dependencies, runs `ruff check .`, and executes `python -m pytest tests/memory -q`. Ensure that workflow passes before merging.
 
