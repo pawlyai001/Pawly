@@ -17,7 +17,7 @@ from aiogram.client.session.aiohttp import AiohttpSession
 from aiogram.enums import ParseMode
 from aiogram.fsm.storage.redis import RedisStorage
 
-from src.bot.handlers import callbacks, message, start
+from src.bot.handlers import admin, callbacks, message, start
 from src.bot.middleware.rate_limiter import RateLimiterMiddleware
 from src.bot.middleware.session import SessionMiddleware
 from src.bot.middleware.user_loader import UserLoaderMiddleware
@@ -57,6 +57,7 @@ async def create_bot() -> tuple[Bot, Dispatcher]:
     dp.include_router(start.router)
     dp.include_router(message.router)
     dp.include_router(callbacks.router)
+    dp.include_router(admin.router)
 
     me = await bot.get_me()
     logger.info("bot initialised", username=me.username, env=settings.node_env)

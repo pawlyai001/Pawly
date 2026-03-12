@@ -104,6 +104,15 @@ cp .env.prod.example .env.prod
 docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d
 ```
 
+## Prompt Reload (No Restart)
+
+Set `ADMIN_TELEGRAM_IDS` (comma-separated Telegram user IDs) and use `/reload_prompt` to reload `src/llm/prompts/prompts_config.yaml` without restarting.
+Example:
+
+```bash
+ADMIN_TELEGRAM_IDS=123456789,987654321
+```
+
 ## Environment Variables
 
 | Variable | Required | Default | Description |

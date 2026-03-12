@@ -17,6 +17,8 @@ class Settings(BaseSettings):
     max_messages_per_minute: int = 30
     webhook_host: str = ""  # e.g. "api.pawly.app" - required in production
     telegram_proxy_url: str = ""
+    admin_telegram_ids: str = ""
+    prompt_hot_reload: bool = False
 
     model_config = ConfigDict(env_file=".env")
 

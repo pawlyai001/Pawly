@@ -2,20 +2,21 @@
 System prompt builder.
 
 ALL editable prompt text lives in prompts_config.yaml (same directory).
-Edit that file to tune personality, rules, or medical format — no Python
-changes required. The file is loaded once at import time; restart the
-process to pick up changes.
+Edit that file to tune personality, rules, or medical format - no Python
+changes required. The file is loaded once at import time unless hot reload
+is enabled.
 
 Sections (keys in prompts_config.yaml):
-    identity           — who Pawly is + two operating modes
-    conversation_rules — opening, pet ID, info gathering, follow-up, closure
-    hard_rules         — non-negotiable safety + behaviour rules
-    medical_format     — internal assessment + response structure for health queries
+    identity           - who Pawly is + two operating modes
+    conversation_rules - opening, pet ID, info gathering, follow-up, closure
+    hard_rules         - non-negotiable safety + behaviour rules
+    medical_format     - internal assessment + response structure for health queries
 
-The build_system_prompt() function only assembles sections — do not touch it
+The build_system_prompt() function only assembles sections - do not touch it
 unless you need to add a new conditional section.
 """
 
+import os
 import pathlib
 from typing import Optional
 
@@ -23,21 +24,49 @@ import yaml
 
 from src.db.models import Pet, SubscriptionTier, User
 
-# ── Load prompt sections from YAML ────────────────────────────────────────────
+# -- Load prompt sections from YAML -------------------------------------------
 
 _CONFIG_FILE = pathlib.Path(__file__).parent / "prompts_config.yaml"
-
-with _CONFIG_FILE.open("r", encoding="utf-8") as _f:
-    _cfg: dict = yaml.safe_load(_f)
-
-# Module-level constants — importable by tests or admin tooling.
-SECTION_IDENTITY: str = _cfg["identity"].rstrip("\n")
-SECTION_CONVERSATION_RULES: str = _cfg["conversation_rules"].rstrip("\n")
-SECTION_HARD_RULES: str = _cfg["hard_rules"].rstrip("\n")
-SECTION_MEDICAL_FORMAT: str = _cfg["medical_format"].rstrip("\n")
+_CACHE: dict = {"mtime": None, "sections": None}
 
 
-# ── Assembler — no prompt text below this line ────────────────────────────────
+def _load_sections() -> dict:
+    """
+    Load prompt sections from YAML.
+
+    If PROMPT_HOT_RELOAD=true, re-read the file when mtime changes.
+    """
+    hot_reload = os.getenv("PROMPT_HOT_RELOAD", "").lower() in {"1", "true", "yes"}
+    mtime = _CONFIG_FILE.stat().st_mtime
+
+    if not hot_reload and _CACHE["sections"] is not None:
+        return _CACHE["sections"]
+
+    if hot_reload and _CACHE["sections"] is not None and _CACHE["mtime"] == mtime:
+        return _CACHE["sections"]
+
+    with _CONFIG_FILE.open("r", encoding="utf-8") as _f:
+        cfg: dict = yaml.safe_load(_f)
+
+    sections = {
+        "identity": cfg["identity"].rstrip("\n"),
+        "conversation_rules": cfg["conversation_rules"].rstrip("\n"),
+        "hard_rules": cfg["hard_rules"].rstrip("\n"),
+        "medical_format": cfg["medical_format"].rstrip("\n"),
+    }
+    _CACHE["mtime"] = mtime
+    _CACHE["sections"] = sections
+    return sections
+
+
+def reload_prompt_sections() -> dict:
+    """Force reload of prompt sections (used by /reload_prompt)."""
+    _CACHE["mtime"] = None
+    _CACHE["sections"] = None
+    return _load_sections()
+
+
+# -- Assembler - no prompt text below this line -------------------------------
 
 
 def build_system_prompt(
@@ -54,17 +83,18 @@ def build_system_prompt(
 
     Sections 1-4 are always included. Sections 5-8 are conditional.
     """
+    sections = _load_sections()
     parts: list[str] = [
-        SECTION_IDENTITY,
+        sections["identity"],
         "",
-        SECTION_CONVERSATION_RULES,
+        sections["conversation_rules"],
         "",
-        SECTION_HARD_RULES,
+        sections["hard_rules"],
         "",
-        SECTION_MEDICAL_FORMAT,
+        sections["medical_format"],
     ]
 
-    # Section 5 — Pet profile
+    # Section 5 - Pet profile
     if pet:
         age_str = _format_age(pet.age_in_months)
         pet_section = (
@@ -86,11 +116,11 @@ def build_system_prompt(
             "within the first few messages. Be conversational, not a form.",
         ]
 
-    # Section 6 — Memory context
+    # Section 6 - Memory context
     if memory_context:
         parts += ["", "Known context about this pet:", memory_context]
 
-    # Section 7 — Pending confirmation
+    # Section 7 - Pending confirmation
     if pending_confirmation:
         parts += [
             "",
@@ -98,7 +128,7 @@ def build_system_prompt(
             pending_confirmation,
         ]
 
-    # Section 8 — New user onboarding nudge
+    # Section 8 - New user onboarding nudge
     if is_new_user and pet is None:
         parts += [
             "",

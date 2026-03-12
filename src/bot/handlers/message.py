@@ -222,7 +222,7 @@ async def enqueue_extraction(
 # ── Handler ───────────────────────────────────────────────────────────────────
 
 
-@router.message(F.text, ~CommandStart())
+@router.message(F.text, ~CommandStart(), ~F.text.startswith("/"))
 async def handle_message(
     message: Message,
     user: User,
