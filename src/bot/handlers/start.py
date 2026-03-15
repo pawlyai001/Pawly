@@ -12,7 +12,7 @@ from typing import Any
 
 from aiogram import Router
 from aiogram.filters import CommandStart
-from aiogram.types import Message
+from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup, Message
 
 from src.db.models import Pet, User
 from src.llm.orchestrator import generate_opening
@@ -81,6 +81,25 @@ async def cmd_start(
             )
 
     is_new_user = active_pet is None
+
+    # No pet profile yet: show the profile setup form before anything else.
+    if active_pet is None:
+        session["awaiting_pet_profile"] = True
+        session["profile_wizard_step"] = None
+        session["profile_wizard_data"] = {}
+        kb = InlineKeyboardMarkup(
+            inline_keyboard=[
+                [InlineKeyboardButton(
+                    text="Create a profile for my pet",
+                    callback_data="pet_profile_start",
+                )]
+            ]
+        )
+        await message.answer(
+            "Welcome to Pawly! Before we begin, let's set up your pet's profile.",
+            reply_markup=kb,
+        )
+        return
 
     # ── Generate personalised opening via LLM ───────────────────────────────
     opening = await generate_opening(

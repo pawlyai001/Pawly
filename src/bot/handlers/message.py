@@ -11,6 +11,7 @@ Text message handler — orchestrates the full inbound message flow:
     8. Update session counters
 """
 
+import re
 import time
 import uuid
 from datetime import date
@@ -19,6 +20,8 @@ from typing import Any
 from aiogram import F, Router
 from aiogram.filters import CommandStart
 from aiogram.types import Message
+from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
+from sqlalchemy import select
 
 from src.db.engine import get_session_factory
 from src.db.models import (
@@ -28,6 +31,9 @@ from src.db.models import (
     MessageRole,
     MessageType,
     Pet,
+    Species,
+    Gender,
+    NeuteredStatus,
     RawMessage,
     User,
 )
@@ -82,6 +88,171 @@ def split_message(text: str, max_length: int = 4000) -> list[str]:
         chunks.append(remaining)
 
     return chunks or [text]
+
+
+async def load_user_pets(user_id: str) -> list[Pet]:
+    factory = get_session_factory()
+    async with factory() as db:
+        result = await db.execute(
+            select(Pet)
+            .where(Pet.user_id == uuid.UUID(user_id), Pet.is_active.is_(True))
+        )
+        return list(result.scalars().all())
+
+
+def match_pets_by_name(pets: list[Pet], text: str) -> list[Pet]:
+    if not text:
+        return []
+    lower = text.lower()
+    matched: list[Pet] = []
+    for pet in pets:
+        name = (pet.name or "").strip()
+        if not name:
+            continue
+        pattern = r"\b" + re.escape(name.lower()) + r"\b"
+        if re.search(pattern, lower):
+            matched.append(pet)
+    return matched
+
+
+def build_pet_choice_keyboard(pets: list[Pet]) -> InlineKeyboardMarkup:
+    rows = [
+        [InlineKeyboardButton(
+            text=f"{pet.name} ({pet.species.value})",
+            callback_data=f"pet_select:{pet.id}",
+        )]
+        for pet in pets
+    ]
+    return InlineKeyboardMarkup(inline_keyboard=rows)
+
+
+def _parse_age_to_months(raw: str) -> int | None:
+    if not raw:
+        return None
+    text = raw.lower().strip()
+    m = re.search(r"(\d+(?:\.\d+)?)\s*(year|years|yr|yrs|y)", text)
+    if m:
+        years = float(m.group(1))
+        return int(round(years * 12))
+    m = re.search(r"(\d+(?:\.\d+)?)\s*(month|months|mo|mos|m)", text)
+    if m:
+        months = float(m.group(1))
+        return int(round(months))
+    # If no unit, assume years for small numbers, months for larger.
+    m = re.search(r"(\d+(?:\.\d+)?)", text)
+    if m:
+        val = float(m.group(1))
+        if val <= 30:
+            return int(round(val * 12))
+        return int(round(val))
+    return None
+
+
+def _parse_weight(raw: str) -> float | None:
+    if not raw:
+        return None
+    m = re.search(r"(\d+(?:\.\d+)?)", raw)
+    if not m:
+        return None
+    return float(m.group(1))
+
+
+def parse_pet_profile(text: str) -> dict | None:
+    if not text:
+        return None
+    lines = [l.strip() for l in text.splitlines() if l.strip()]
+    # 1) Markdown table parsing
+    for i, line in enumerate(lines):
+        if "|" in line and "name" in line.lower() and "species" in line.lower():
+            headers = [h.strip().lower() for h in line.strip("|").split("|")]
+            row = None
+            for j in range(i + 1, len(lines)):
+                candidate = lines[j]
+                # skip separator row like | --- | --- |
+                if set(candidate.replace("|", "").replace(" ", "")) <= {"-"}:
+                    continue
+                if "|" in candidate:
+                    row = [c.strip() for c in candidate.strip("|").split("|")]
+                    break
+            if row:
+                data = dict(zip(headers, row))
+                return data
+
+    # 2) Key-value lines
+    data: dict[str, str] = {}
+    for line in lines:
+        m = re.match(r"^\s*([A-Za-z _]+)\s*[:=]\s*(.+)\s*$", line)
+        if m:
+            key = m.group(1).strip().lower()
+            val = m.group(2).strip()
+            data[key] = val
+    return data or None
+
+
+def normalize_profile_fields(raw: dict) -> dict | None:
+    if not raw:
+        return None
+    name = raw.get("name") or raw.get("pet name")
+    species_raw = raw.get("species") or raw.get("pet type") or raw.get("type")
+    if not name or not species_raw:
+        return None
+    species_lower = str(species_raw).lower()
+    if "cat" in species_lower:
+        species = Species.CAT
+    elif "dog" in species_lower:
+        species = Species.DOG
+    else:
+        species = Species.OTHER
+
+    gender_raw = str(raw.get("gender", "")).lower()
+    if "male" in gender_raw:
+        gender = Gender.MALE
+    elif "female" in gender_raw:
+        gender = Gender.FEMALE
+    else:
+        gender = Gender.UNKNOWN
+
+    neutered_raw = str(raw.get("neutered", "")).lower()
+    if neutered_raw in {"yes", "y", "true"} or "yes" in neutered_raw:
+        neutered = NeuteredStatus.YES
+    elif neutered_raw in {"no", "n", "false"} or "no" in neutered_raw:
+        neutered = NeuteredStatus.NO
+    else:
+        neutered = NeuteredStatus.UNKNOWN
+
+    age_months = _parse_age_to_months(str(raw.get("age", "")))
+    weight = _parse_weight(str(raw.get("weight", "")))
+    breed = raw.get("breed")
+
+    return {
+        "name": str(name).strip(),
+        "species": species,
+        "age_in_months": age_months,
+        "breed": str(breed).strip() if breed else None,
+        "gender": gender,
+        "neutered_status": neutered,
+        "weight_latest": weight,
+    }
+
+
+async def create_pet_profile(user_id: str, fields: dict) -> Pet:
+    factory = get_session_factory()
+    async with factory() as db:
+        pet = Pet(
+            user_id=uuid.UUID(user_id),
+            name=fields["name"],
+            species=fields["species"],
+            age_in_months=fields.get("age_in_months"),
+            breed=fields.get("breed"),
+            gender=fields.get("gender") or Gender.UNKNOWN,
+            neutered_status=fields.get("neutered_status") or NeuteredStatus.UNKNOWN,
+            weight_latest=fields.get("weight_latest"),
+            is_active=True,
+        )
+        db.add(pet)
+        await db.commit()
+        await db.refresh(pet)
+    return pet
 
 
 async def store_raw_message(
@@ -244,6 +415,113 @@ async def handle_message(
 
     user_id_str = str(user.id)
     pet_id_str = str(active_pet.id) if active_pet else None
+
+    # If no active pet and not in wizard, prompt to start profile creation.
+    if active_pet is None and not session.get("profile_wizard_step"):
+        session["awaiting_pet_profile"] = True
+        session["profile_wizard_data"] = {}
+        kb = InlineKeyboardMarkup(
+            inline_keyboard=[
+                [InlineKeyboardButton(
+                    text="Create a profile for my pet",
+                    callback_data="pet_profile_start",
+                )]
+            ]
+        )
+        await message.answer(
+            "Before we begin, please create your pet's profile.",
+            reply_markup=kb,
+        )
+        return
+
+    # Profile wizard: capture text input for name or age fields.
+    # Species and neutered are handled via inline buttons in callbacks.py.
+    wizard_step = session.get("profile_wizard_step")
+    if wizard_step in ("name", "age"):
+        text = message.text.strip()
+        profile = session.get("profile_wizard_data") or {}
+
+        if wizard_step == "name":
+            profile["name"] = text
+        elif wizard_step == "age":
+            if not _parse_age_to_months(text):
+                await message.answer(
+                    "Please enter age like '2 years' or '6 months'."
+                )
+                return
+            profile["age"] = text
+
+        session["profile_wizard_data"] = profile
+        session["profile_wizard_step"] = None  # clear pending text step
+
+        # Delete the bot's text prompt if we stored its ID
+        prompt_msg_id = session.pop("profile_prompt_message_id", None)
+        if prompt_msg_id:
+            try:
+                await message.bot.delete_message(  # type: ignore[union-attr]
+                    chat_id=message.chat.id, message_id=prompt_msg_id
+                )
+            except Exception:
+                pass
+
+        # Edit the form message to reflect the updated value
+        from src.bot.handlers.callbacks import _build_form_text, _build_form_keyboard
+
+        form_msg_id = session.get("profile_form_message_id")
+        if form_msg_id:
+            try:
+                await message.bot.edit_message_text(  # type: ignore[union-attr]
+                    chat_id=message.chat.id,
+                    message_id=form_msg_id,
+                    text=_build_form_text(profile),
+                    reply_markup=_build_form_keyboard(profile),
+                )
+            except Exception:
+                # If edit fails, send a fresh form
+                sent = await message.answer(
+                    _build_form_text(profile),
+                    reply_markup=_build_form_keyboard(profile),
+                )
+                session["profile_form_message_id"] = sent.message_id
+        else:
+            # No stored form message — send one now
+            sent = await message.answer(
+                _build_form_text(profile),
+                reply_markup=_build_form_keyboard(profile),
+            )
+            session["profile_form_message_id"] = sent.message_id
+
+        # Also delete the user's text message to keep the chat clean
+        try:
+            await message.delete()
+        except Exception:
+            pass
+        return
+
+    # Waiting for button selection — ignore free text
+    if wizard_step in ("species", "neutered"):
+        return
+
+    # Resolve active pet from message text if multiple pets exist.
+    pets = await load_user_pets(user_id_str)
+    if len(pets) > 1:
+        matched = match_pets_by_name(pets, message.text)
+        if len(matched) == 1:
+            active_pet = matched[0]
+            pet_id_str = str(active_pet.id)
+            session["active_pet_id"] = pet_id_str
+        elif len(matched) > 1:
+            await message.answer(
+                "Which pet are we talking about?",
+                reply_markup=build_pet_choice_keyboard(matched),
+            )
+            return
+        elif not session.get("active_pet_id"):
+            await message.answer(
+                "Which pet are we talking about?",
+                reply_markup=build_pet_choice_keyboard(pets),
+            )
+            return
 
     # 1. Store raw user message (session/dialogue IDs may be empty strings on
     #    the very first message — acceptable for the append-only audit log)
