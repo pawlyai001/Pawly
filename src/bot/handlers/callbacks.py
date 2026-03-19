@@ -102,7 +102,7 @@ def _build_form_keyboard(data: dict) -> InlineKeyboardMarkup:
     ]
 
     # Submit button appears only once required fields are filled
-    if name and species:
+    if name and species and gender:
         rows.append(
             [
                 InlineKeyboardButton(
@@ -257,6 +257,14 @@ async def handle_callback(
         session["profile_wizard_data"] = profile
         await callback.answer("Got it.")
         await _try_edit_form(callback, profile)
+        # If neutered not yet set, ask it as the next sequential step
+        if not profile.get("neutered") and callback.message:
+            neutered_kb = InlineKeyboardMarkup(inline_keyboard=[[
+                InlineKeyboardButton(text="Yes", callback_data="pet_profile_neutered:yes"),
+                InlineKeyboardButton(text="No", callback_data="pet_profile_neutered:no"),
+                InlineKeyboardButton(text="Not sure", callback_data="pet_profile_neutered:unknown"),
+            ]])
+            await callback.message.answer("Is your pet spayed/neutered?", reply_markup=neutered_kb)
         return
 
     # ── Pet profile: set neutered status ──────────────────────────────────────

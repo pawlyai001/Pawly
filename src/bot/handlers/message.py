@@ -491,6 +491,14 @@ async def handle_message(
             )
             session["profile_form_message_id"] = sent.message_id
 
+        # After age is collected, ask for gender next
+        if wizard_step == "age":
+            gender_kb = InlineKeyboardMarkup(inline_keyboard=[[
+                InlineKeyboardButton(text="♂ Male", callback_data="pet_profile_gender:male"),
+                InlineKeyboardButton(text="♀ Female", callback_data="pet_profile_gender:female"),
+            ]])
+            await message.answer("What is your pet's gender?", reply_markup=gender_kb)
+
         # Also delete the user's text message to keep the chat clean
         try:
             await message.delete()
