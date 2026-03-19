@@ -102,7 +102,7 @@ def _build_form_keyboard(data: dict) -> InlineKeyboardMarkup:
     ]
 
     # Submit button appears only once required fields are filled
-    if name and species:
+    if name and species and gender:
         rows.append(
             [
                 InlineKeyboardButton(
