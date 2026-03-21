@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+  <title>Create Pet Profile</title>
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: #1C1C1E;
+      color: #FFFFFF;
+      font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Segoe UI', sans-serif;
+      padding: 20px 16px 36px;
+      min-height: 100vh;
+    }
+
+    /* ── Header ── */
+    .header { margin-bottom: 28px; }
+    .header h1 { font-size: 22px; font-weight: 700; margin-bottom: 6px; }
+    .header p  { font-size: 13px; color: #8E8E93; line-height: 1.5; }
+
+    /* ── Field wrapper ── */
+    .field { margin-bottom: 20px; }
+    .field > label {
+      display: block;
+      font-size: 13px;
+      color: #8E8E93;
+      margin-bottom: 8px;
+      font-weight: 500;
+    }
+    .field > label .req { color: #FF453A; margin-left: 2px; }
+
+    /* ── Text / number inputs ── */
+    .field input[type="text"],
+    .field input[type="number"],
+    .field textarea {
+      width: 100%;
+      background: #2C2C2E;
+      border: 1.5px solid transparent;
+      border-radius: 12px;
+      padding: 14px 16px;
+      color: #FFFFFF;
+      font-size: 16px;
+      outline: none;
+      transition: border-color 0.15s;
+      -webkit-appearance: none;
+    }
+    .field input[type="text"]:focus,
+    .field input[type="number"]:focus,
+    .field textarea:focus { border-color: #FF6B00; }
+    .field input::placeholder,
+    .field textarea::placeholder { color: #48484A; }
+    .field textarea { resize: none; height: 84px; font-family: inherit; }
+    /* hide number arrows */
+    input[type="number"]::-webkit-inner-spin-button,
+    input[type="number"]::-webkit-outer-spin-button { -webkit-appearance: none; }
+
+    /* ── Select button groups ── */
+    .btn-group { display: flex; gap: 10px; }
+
+    .sel-btn {
+      flex: 1;
+      background: #2C2C2E;
+      border: 1.5px solid transparent;
+      border-radius: 12px;
+      padding: 14px 12px;
+      color: #FFFFFF;
+      font-size: 15px;
+      font-weight: 500;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: border-color 0.15s, background 0.15s;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .sel-btn.species { flex-direction: column; gap: 6px; padding: 16px 12px; }
+    .sel-btn .emoji  { font-size: 26px; }
+    .sel-btn.active  { border-color: #FF6B00; }
+
+    /* ── Inline row (age / weight) ── */
+    .inline-row { display: flex; gap: 10px; align-items: center; }
+    .inline-row input {
+      flex: 1;
+      background: #2C2C2E;
+      border: 1.5px solid transparent;
+      border-radius: 12px;
+      padding: 14px 16px;
+      color: #FFFFFF;
+      font-size: 16px;
+      outline: none;
+      transition: border-color 0.15s;
+      -webkit-appearance: none;
+    }
+    .inline-row input:focus { border-color: #FF6B00; }
+    .inline-row input::placeholder { color: #48484A; }
+
+    /* ── Unit toggle (Y/M, kg/lb) ── */
+    .unit-toggle {
+      display: flex;
+      background: #2C2C2E;
+      border-radius: 10px;
+      padding: 3px;
+    }
+    .unit-btn {
+      background: transparent;
+      border: none;
+      border-radius: 8px;
+      padding: 8px 14px;
+      color: #8E8E93;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.15s, color 0.15s;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .unit-btn.active { background: #FF6B00; color: #FFFFFF; }
+
+    /* ── Validation error ── */
+    .err {
+      color: #FF453A;
+      font-size: 12px;
+      margin-top: 6px;
+      display: none;
+    }
+    .err.show { display: block; }
+
+    /* ── CTA ── */
+    .cta {
+      width: 100%;
+      background: #FF6B00;
+      border: none;
+      border-radius: 14px;
+      padding: 17px;
+      color: #FFFFFF;
+      font-size: 17px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 12px;
+      transition: opacity 0.15s;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .cta:active { opacity: 0.8; }
+  </style>
+</head>
+<body>
+
+  <div class="header">
+    <h1>🐾 Create Pet Profile</h1>
+    <p>Add your pet's basic information to receive more accurate health guidance</p>
+  </div>
+
+  <!-- Pet's Name -->
+  <div class="field">
+    <label>Pet's Name <span class="req">*</span></label>
+    <input type="text" id="name" placeholder="Enter your pet's name" maxlength="50" />
+    <div class="err" id="err-name">Please enter your pet's name.</div>
+  </div>
+
+  <!-- Species -->
+  <div class="field">
+    <label>Species <span class="req">*</span></label>
+    <div class="btn-group">
+      <button class="sel-btn species" data-group="species" data-value="cat" onclick="pick(this)">
+        <span class="emoji">🐱</span><span>Cat</span>
+      </button>
+      <button class="sel-btn species" data-group="species" data-value="dog" onclick="pick(this)">
+        <span class="emoji">🐕</span><span>Dog</span>
+      </button>
+    </div>
+    <div class="err" id="err-species">Please select a species.</div>
+  </div>
+
+  <!-- Breed -->
+  <div class="field">
+    <label>Breed <span class="req">*</span></label>
+    <input type="text" id="breed" placeholder="e.g. British Shorthair, Golden Retriever" maxlength="80" />
+    <div class="err" id="err-breed">Please enter the breed.</div>
+  </div>
+
+  <!-- Age -->
+  <div class="field">
+    <label>Age <span class="req">*</span></label>
+    <div class="inline-row">
+      <input type="number" id="age" placeholder="0" min="0" max="999" />
+      <div class="unit-toggle">
+        <button class="unit-btn active" data-group="age_unit" data-value="Y" onclick="pickUnit(this)">Y</button>
+        <button class="unit-btn"        data-group="age_unit" data-value="M" onclick="pickUnit(this)">M</button>
+      </div>
+    </div>
+    <div class="err" id="err-age">Please enter your pet's age.</div>
+  </div>
+
+  <!-- Gender -->
+  <div class="field">
+    <label>Gender <span class="req">*</span></label>
+    <div class="btn-group">
+      <button class="sel-btn" data-group="gender" data-value="male"   onclick="pick(this)">Male</button>
+      <button class="sel-btn" data-group="gender" data-value="female" onclick="pick(this)">Female</button>
+    </div>
+    <div class="err" id="err-gender">Please select a gender.</div>
+  </div>
+
+  <!-- Neutered / Spayed -->
+  <div class="field">
+    <label>Neutered / Spayed <span class="req">*</span></label>
+    <div class="btn-group">
+      <button class="sel-btn" data-group="neutered" data-value="yes"     onclick="pick(this)">Yes</button>
+      <button class="sel-btn" data-group="neutered" data-value="no"      onclick="pick(this)">No</button>
+      <button class="sel-btn" data-group="neutered" data-value="unknown" onclick="pick(this)">Not Sure</button>
+    </div>
+    <div class="err" id="err-neutered">Please select an option.</div>
+  </div>
+
+  <!-- Weight (Optional) -->
+  <div class="field">
+    <label>Weight (Optional)</label>
+    <div class="inline-row">
+      <input type="number" id="weight" placeholder="0.0" min="0" step="0.1" />
+      <div class="unit-toggle">
+        <button class="unit-btn active" data-group="weight_unit" data-value="kg" onclick="pickUnit(this)">kg</button>
+        <button class="unit-btn"        data-group="weight_unit" data-value="lb" onclick="pickUnit(this)">lb</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Medical History (Optional) -->
+  <div class="field">
+    <label>Medical History (Optional)</label>
+    <textarea id="medical_history" placeholder="Describe any past illnesses, chronic conditions, or allergies"></textarea>
+  </div>
+
+  <button class="cta" onclick="submitForm()">Create Profile &amp; Start</button>
+
+  <script>
+    const tg = window.Telegram.WebApp;
+    tg.expand();
+    tg.ready();
+
+    // --- state ---
+    const state = { species: null, gender: null, neutered: null, age_unit: 'Y', weight_unit: 'kg' };
+
+    function pick(btn) {
+      const group = btn.dataset.group;
+      btn.closest('.btn-group').querySelectorAll('.sel-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      state[group] = btn.dataset.value;
+      hide('err-' + group);
+    }
+
+    function pickUnit(btn) {
+      const group = btn.dataset.group;
+      btn.closest('.unit-toggle').querySelectorAll('.unit-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      state[group] = btn.dataset.value;
+    }
+
+    function show(id) { const el = document.getElementById(id); if (el) el.classList.add('show'); }
+    function hide(id) { const el = document.getElementById(id); if (el) el.classList.remove('show'); }
+
+    function submitForm() {
+      const name   = document.getElementById('name').value.trim();
+      const breed  = document.getElementById('breed').value.trim();
+      const age    = document.getElementById('age').value.trim();
+      const weight = document.getElementById('weight').value.trim();
+      const medHx  = document.getElementById('medical_history').value.trim();
+
+      let ok = true;
+      if (!name)          { show('err-name');     ok = false; }
+      if (!state.species) { show('err-species');  ok = false; }
+      if (!breed)         { show('err-breed');    ok = false; }
+      if (!age)           { show('err-age');      ok = false; }
+      if (!state.gender)  { show('err-gender');   ok = false; }
+      if (!state.neutered){ show('err-neutered'); ok = false; }
+      if (!ok) return;
+
+      tg.sendData(JSON.stringify({
+        name,
+        species:         state.species,
+        breed,
+        age,
+        age_unit:        state.age_unit,
+        gender:          state.gender,
+        neutered:        state.neutered,
+        weight:          weight || null,
+        weight_unit:     state.weight_unit,
+        medical_history: medHx || null,
+      }));
+    }
+  </script>
+</body>
+</html>
