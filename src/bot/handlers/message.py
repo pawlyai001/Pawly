@@ -20,7 +20,7 @@ from typing import Any
 from aiogram import F, Router
 from aiogram.filters import CommandStart
 from aiogram.types import Message
-from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
+from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup, WebAppInfo
 from sqlalchemy import select
 
 from src.db.engine import get_session_factory
@@ -417,14 +417,14 @@ async def handle_message(
     pet_id_str = str(active_pet.id) if active_pet else None
 
     # If no active pet and not in wizard, prompt to start profile creation.
-    if active_pet is None and not session.get("profile_wizard_step"):
+    if active_pet is None:
         session["awaiting_pet_profile"] = True
-        session["profile_wizard_data"] = {}
+        from src.bot.handlers.start import MINI_APP_URL
         kb = InlineKeyboardMarkup(
             inline_keyboard=[
                 [InlineKeyboardButton(
-                    text="Create a profile for my pet",
-                    callback_data="pet_profile_start",
+                    text="🐾 Create Pet Profile",
+                    web_app=WebAppInfo(url=MINI_APP_URL),
                 )]
             ]
         )
@@ -435,21 +435,29 @@ async def handle_message(
         return
 
     # Profile wizard: capture text input for name or age fields.
-    # Species and neutered are handled via inline buttons in callbacks.py.
+    # Text-input steps — species/gender/neutered are handled via inline buttons.
+    _TEXT_STEPS = ("name", "breed", "age", "weight", "medical_history")
     wizard_step = session.get("profile_wizard_step")
-    if wizard_step in ("name", "age"):
+    if wizard_step in _TEXT_STEPS:
         text = message.text.strip()
         profile = session.get("profile_wizard_data") or {}
 
         if wizard_step == "name":
             profile["name"] = text
+        elif wizard_step == "breed":
+            profile["breed"] = text
         elif wizard_step == "age":
             if not _parse_age_to_months(text):
                 await message.answer(
-                    "Please enter age like '2 years' or '6 months'."
+                    "Please enter a number, e.g. '2' for years or '6' for months, "
+                    "then use the Y/M buttons to set the unit."
                 )
                 return
             profile["age"] = text
+        elif wizard_step == "weight":
+            profile["weight"] = text
+        elif wizard_step == "medical_history":
+            profile["medical_history"] = text
 
         session["profile_wizard_data"] = profile
         session["profile_wizard_step"] = None  # clear pending text step
@@ -477,36 +485,26 @@ async def handle_message(
                     reply_markup=_build_form_keyboard(profile),
                 )
             except Exception:
-                # If edit fails, send a fresh form
                 sent = await message.answer(
                     _build_form_text(profile),
                     reply_markup=_build_form_keyboard(profile),
                 )
                 session["profile_form_message_id"] = sent.message_id
         else:
-            # No stored form message — send one now
             sent = await message.answer(
                 _build_form_text(profile),
                 reply_markup=_build_form_keyboard(profile),
             )
             session["profile_form_message_id"] = sent.message_id
 
-        # After age is collected, ask for gender next
-        if wizard_step == "age":
-            gender_kb = InlineKeyboardMarkup(inline_keyboard=[[
-                InlineKeyboardButton(text="♂ Male", callback_data="pet_profile_gender:male"),
-                InlineKeyboardButton(text="♀ Female", callback_data="pet_profile_gender:female"),
-            ]])
-            await message.answer("What is your pet's gender?", reply_markup=gender_kb)
-
-        # Also delete the user's text message to keep the chat clean
+        # Delete the user's text message to keep the chat clean
         try:
             await message.delete()
         except Exception:
             pass
         return
 
-    # Waiting for button selection — ignore free text
+    # Waiting for button selection — ignore free text during those steps
     if wizard_step in ("species", "gender", "neutered"):
         return
 
@@ -563,8 +561,12 @@ async def handle_message(
     )
 
     # 4. Send reply (split if > 4000 chars)
+    # RED/ORANGE use HTML (formatters inject <b>, <blockquote> etc.)
+    # GREEN uses Markdown so LLM bold/italic renders properly
+    triage_final = (result.triage_result or {}).get("final", "green")
+    pm = "HTML" if triage_final in ("red", "orange") else "Markdown"
     for chunk in split_message(result.response_text, max_length=4000):
-        await message.answer(chunk, parse_mode=None)
+        await message.answer(chunk, parse_mode=pm)
 
     # 5. Store bot reply as raw message
     bot_raw = await store_raw_message(

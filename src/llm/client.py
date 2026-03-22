@@ -1,18 +1,54 @@
 """
 Google Gen AI wrapper - GeminiClient.
 
-chat()    -> main conversation (Gemini Flash)
-extract() -> structured extraction (Gemini Flash)
-
-Both return {"text": str, "input_tokens": int, "output_tokens": int}.
+chat()            -> plain conversation (Gemini Flash)
+chat_structured() -> conversation with JSON-schema-constrained output
+extract()         -> structured extraction (Gemini Flash)
 
 Singleton: get_gemini_client()
 """
 
 import asyncio
+import json
 from typing import Any
 
 from src.config import settings
+
+
+# ── Structured response schema ────────────────────────────────────────────────
+# Used by chat_structured() to force Gemini to return both the user-facing
+# response text and classification metadata in a single call.
+
+RESPONSE_SCHEMA: dict[str, Any] = {
+    "type": "OBJECT",
+    "properties": {
+        "response_text": {
+            "type": "STRING",
+            "description": "The user-facing response message. Plain text only — no emoji headers or visual chrome.",
+        },
+        "triage_level": {
+            "type": "STRING",
+            "enum": ["RED", "ORANGE", "GREEN"],
+            "description": "Triage classification: RED (emergency), ORANGE (concerning), GREEN (routine).",
+        },
+        "intent": {
+            "type": "STRING",
+            "enum": ["symptom_report", "nutrition", "exercise", "grooming", "behavior", "question", "general"],
+            "description": "The primary intent of the user message.",
+        },
+        "sentiment": {
+            "type": "STRING",
+            "enum": ["CALM", "ANXIOUS", "PANIC"],
+            "description": "The owner's emotional state inferred from their message.",
+        },
+        "symptom_tags": {
+            "type": "ARRAY",
+            "items": {"type": "STRING"},
+            "description": "Symptom keywords mentioned or implied (e.g. 'vomiting', 'lethargy'). Empty list if none.",
+        },
+    },
+    "required": ["response_text", "triage_level", "intent", "sentiment", "symptom_tags"],
+}
 
 
 class GeminiClient:
@@ -211,6 +247,73 @@ class GeminiClient:
                 return count
         return 0
 
+    async def _call_structured(
+        self,
+        model: str,
+        system_prompt: str,
+        messages: list[dict[str, Any]],
+        max_tokens: int,
+        temperature: float,
+        response_schema: dict[str, Any],
+    ) -> dict[str, Any]:
+        """Call Gemini with JSON response_schema enforcement."""
+        if self._sdk_mode == "genai":
+            contents = self._build_contents(messages)
+            response = await asyncio.to_thread(
+                self._sync_call_genai_structured,
+                model,
+                system_prompt,
+                contents,
+                max_tokens,
+                temperature,
+                response_schema,
+            )
+            raw = self._format_response_genai(response)
+            # Parse the JSON text into a dict and merge with token counts
+            try:
+                parsed = json.loads(raw["text"])
+            except (json.JSONDecodeError, TypeError):
+                parsed = {"response_text": raw["text"]}
+            parsed["input_tokens"] = raw["input_tokens"]
+            parsed["output_tokens"] = raw["output_tokens"]
+            return parsed
+
+        # Legacy SDK: fall back to regular call + manual JSON parse attempt
+        result = await self._call(model, system_prompt, messages, max_tokens, temperature)
+        try:
+            parsed = json.loads(result["text"])
+            parsed["input_tokens"] = result["input_tokens"]
+            parsed["output_tokens"] = result["output_tokens"]
+            return parsed
+        except (json.JSONDecodeError, TypeError):
+            return {
+                "response_text": result["text"],
+                "input_tokens": result["input_tokens"],
+                "output_tokens": result["output_tokens"],
+            }
+
+    def _sync_call_genai_structured(
+        self,
+        model: str,
+        system_prompt: str,
+        contents: list[Any],
+        max_tokens: int,
+        temperature: float,
+        response_schema: dict[str, Any],
+    ) -> Any:
+        config = self._types.GenerateContentConfig(
+            system_instruction=system_prompt or None,
+            max_output_tokens=max_tokens,
+            temperature=temperature,
+            response_mime_type="application/json",
+            response_schema=response_schema,
+        )
+        return self._client.models.generate_content(
+            model=model,
+            contents=contents,
+            config=config,
+        )
+
     async def chat(
         self,
         system_prompt: str,
@@ -218,6 +321,7 @@ class GeminiClient:
         model: str | None = None,
         max_tokens: int = 2048,
         temperature: float = 0.7,
+        **kwargs: Any,
     ) -> dict[str, Any]:
         """
         Main conversation call (Gemini Flash by default).
@@ -229,6 +333,35 @@ class GeminiClient:
             messages=messages,
             max_tokens=max_tokens,
             temperature=temperature,
+        )
+
+    async def chat_structured(
+        self,
+        system_prompt: str,
+        messages: list[dict[str, Any]],
+        model: str | None = None,
+        max_tokens: int = 2048,
+        temperature: float = 0.7,
+    ) -> dict[str, Any]:
+        """
+        Conversation call with structured JSON output.
+
+        Returns a dict with:
+            response_text: str
+            triage_level: "RED" | "ORANGE" | "GREEN"
+            intent: str
+            sentiment: "CALM" | "ANXIOUS" | "PANIC"
+            symptom_tags: list[str]
+            input_tokens: int
+            output_tokens: int
+        """
+        return await self._call_structured(
+            model=model or settings.main_model,
+            system_prompt=system_prompt,
+            messages=messages,
+            max_tokens=max_tokens,
+            temperature=temperature,
+            response_schema=RESPONSE_SCHEMA,
         )
 
     async def extract(

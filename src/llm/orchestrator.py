@@ -5,13 +5,17 @@ Public API consumed by bot handlers:
     generate_opening(user, pet, is_new_user, marketing_context) -> OrchestratorResult
     generate_response(user, pet, dialogue_id, user_message, ...)  -> OrchestratorResult
 
-Both return OrchestratorResult. Helpers (prefixed _) are internal.
+When USE_LANGGRAPH=true, generate_response() delegates to the LangGraph
+pipeline (src/llm/graph/). Otherwise, it uses the classic sequential path.
+
+generate_opening() always uses the classic path (no triage needed).
 """
 
 import uuid
 from dataclasses import dataclass, field
 from typing import Any, Optional
 
+from src.config import settings
 from src.db.models import (
     MessageType,
     Pet,
@@ -24,6 +28,7 @@ from src.db.models import (
 )
 from src.llm.client import get_gemini_client
 from src.llm.prompts.context import build_context_block
+from src.llm.prompts.formatters import apply_response_format
 from src.llm.prompts.system import build_system_prompt
 from src.memory.reader import load_pet_context, load_related_memories
 from src.triage.rules_engine import (
@@ -34,6 +39,17 @@ from src.triage.rules_engine import (
 from src.utils.logger import get_logger
 
 logger = get_logger(__name__)
+
+# Lazy-built graph to avoid circular import (graph.nodes imports from this module)
+_graph = None
+
+
+def _get_graph():
+    global _graph
+    if _graph is None:
+        from src.llm.graph import build_graph
+        _graph = build_graph()
+    return _graph
 
 
 # ── Result type ───────────────────────────────────────────────────────────────
@@ -134,14 +150,82 @@ async def generate_response(
     """
     Generate a response to a user message.
 
-    Steps:
-        1. Load context  (memory tiers, recent turns, daily summary, pending)
-        2. Build system prompt  (with memory_context + pending_confirmation)
-        3. Build messages array  (recent_turns + current user message)
-    4. Call Gemini
-        5. Post-process triage  (rule engine + LLM-inferred → resolved, RED re-call)
-        6. Detect intent, sentiment, symptom tags
+    When USE_LANGGRAPH=true, delegates to the LangGraph pipeline.
+    Otherwise, uses the classic sequential orchestration path.
     """
+    if settings.use_langgraph:
+        return await _generate_response_graph(
+            user, pet, dialogue_id, user_message, message_type, session,
+        )
+    return await _generate_response_classic(
+        user, pet, dialogue_id, user_message, message_type, session, raw_message_id,
+    )
+
+
+# ── LangGraph path (USE_LANGGRAPH=true) ──────────────────────────────────────
+
+
+async def _generate_response_graph(
+    user: User,
+    pet: Optional[Pet],
+    dialogue_id: str,
+    user_message: str,
+    message_type: MessageType,
+    session: Optional[dict[str, Any]],
+) -> OrchestratorResult:
+    """Delegate to the LangGraph pipeline with structured LLM output."""
+    initial_state = {
+        "user": user,
+        "pet": pet,
+        "user_message": user_message,
+        "message_type": message_type,
+        "session": session or {},
+        "dialogue_id": dialogue_id,
+    }
+
+    try:
+        final_state = await _get_graph().ainvoke(initial_state)
+    except Exception as exc:
+        logger.error("graph pipeline failed", error=str(exc))
+        return OrchestratorResult(
+            response_text="I'm having trouble connecting right now. Please try again in a moment.",
+        )
+
+    triage_result = {
+        "rule": final_state.get("rule_triage", TriageLevel.GREEN).value,
+        "llm": final_state["llm_triage"].value if final_state.get("llm_triage") else None,
+        "final": final_state.get("final_triage", TriageLevel.GREEN).value,
+        "overridden": final_state.get("triage_overridden", False),
+        "override_direction": final_state.get("override_direction", ""),
+        "matched_patterns": final_state.get("matched_patterns", []),
+        "confidence": 0.95 if final_state.get("matched_patterns") else 0.5,
+    }
+
+    return OrchestratorResult(
+        response_text=final_state.get("response_text", ""),
+        triage_result=triage_result,
+        intent=final_state.get("intent"),
+        symptom_tags=final_state.get("symptom_tags", []),
+        risk_level=final_state.get("risk_level"),
+        sentiment_user=final_state.get("sentiment"),
+        input_tokens=final_state.get("input_tokens", 0),
+        output_tokens=final_state.get("output_tokens", 0),
+    )
+
+
+# ── Classic path (USE_LANGGRAPH=false, default) ──────────────────────────────
+
+
+async def _generate_response_classic(
+    user: User,
+    pet: Optional[Pet],
+    dialogue_id: str,
+    user_message: str,
+    message_type: MessageType = MessageType.TEXT,
+    session: Optional[dict[str, Any]] = None,
+    raw_message_id: Optional[str] = None,
+) -> OrchestratorResult:
+    """Original sequential orchestration — proven stable path."""
     tier = _tier(user)
     pet_id_str = str(pet.id) if pet else None
     is_health = looks_like_health_query(user_message)
@@ -158,11 +242,9 @@ async def generate_response(
         except Exception as exc:
             logger.warning("load_pet_context failed", error=str(exc))
 
-        # For health queries, also surface field-matched memories
         if is_health:
             try:
                 related = await load_related_memories(pet_id_str, user_message)  # type: ignore[arg-type]
-                # Merge into short_term so build_context_block picks them up
                 existing_ids = {m.id for m in ctx.get("short_term_memories", [])}
                 ctx.setdefault("short_term_memories", []).extend(
                     m for m in related if m.id not in existing_ids
@@ -219,8 +301,6 @@ async def generate_response(
     llm_triage = detect_triage_from_response(response_text)
     resolved = compare_and_resolve(llm_triage, rule_result.classification)
 
-    # Safety override: if rules say RED but LLM response didn't reflect urgency,
-    # re-call Gemini with an explicit override prompt so the user gets the right advice.
     if resolved.overridden and resolved.final_classification == TriageLevel.RED:
         override_system = (
             system
@@ -241,6 +321,9 @@ async def generate_response(
             )
         except Exception as exc:
             logger.error("RED override re-call failed", error=str(exc))
+
+    # Apply Figma visual format based on resolved triage level
+    response_text = apply_response_format(response_text, resolved.final_classification)
 
     triage_result = {
         "rule": rule_result.classification.value,
@@ -283,7 +366,7 @@ async def generate_response(
     )
 
 
-# ── Helper functions ──────────────────────────────────────────────────────────
+# ── Helper functions (kept for backward compat + generate_opening) ───────────
 
 
 def looks_like_health_query(text: str) -> bool:

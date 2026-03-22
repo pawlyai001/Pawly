@@ -135,8 +135,9 @@ def classify_by_rules(pet: Optional[Pet], description: str) -> TriageRuleResult:
     has_urinary     = any(w in desc_lower for w in ["straining", "urination", "pee", "urine", "litter box", "can't pee", "cant pee"])
 
     # ── RED combination triggers ──────────────────────────────────────────────
-    if has_vomit and has_lethargy and has_not_eating:
-        matched.append("combo:vomit_lethargy_anorexia")
+    # Note: vomit + lethargy + not eating alone stays ORANGE — each keyword
+    # is already an individual ORANGE trigger. RED requires a life-threatening
+    # signal (breathing difficulty, blood, collapse, etc.).
 
     if has_diarrhea and has_blood and has_lethargy:
         matched.append("combo:bloody_diarrhea_lethargy")

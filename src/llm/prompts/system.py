@@ -97,12 +97,14 @@ def build_system_prompt(
     # Section 5 - Pet profile
     if pet:
         age_str = _format_age(pet.age_in_months)
+        gender_str = pet.gender.value if pet.gender else "unknown"
+        neutered_str = pet.neutered_status.value if pet.neutered_status else "unknown"
         pet_section = (
             f"Current pet: {pet.name}, {pet.species.value}"
             f" ({pet.breed or 'unknown breed'})"
             f", {age_str}"
-            f", {pet.gender.value}"
-            f", neutered: {pet.neutered_status.value}"
+            f", {gender_str}"
+            f", neutered: {neutered_str}"
             f", weight: {pet.weight_latest or '?'} kg"
         )
         if pet.stage:

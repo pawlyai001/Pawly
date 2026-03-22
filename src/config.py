@@ -19,6 +19,7 @@ class Settings(BaseSettings):
     telegram_proxy_url: str = ""
     admin_telegram_ids: str = ""
     prompt_hot_reload: bool = False
+    use_langgraph: bool = False  # set True to enable LangGraph pipeline (experimental)
 
     model_config = ConfigDict(env_file=".env")
 
