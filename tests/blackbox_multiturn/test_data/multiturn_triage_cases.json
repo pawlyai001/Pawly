@@ -1,0 +1,59 @@
+[
+  {
+    "name": "margaret_biscuit_single_episode_full_followup",
+    "user_display_name": "Margaret",
+    "scenario": "An anxious elderly owner reports a single vomiting episode in her dog, asks follow-up medication questions, and comes back the next day with an update.",
+    "expected_outcome": "The assistant should ask purposeful clarifying questions, avoid over-triaging the initial mild episode, avoid recommending human medication, remember previously given information, and provide an appropriate day-2 follow-up response.",
+    "chatbot_role": "Pawly is a pet care assistant. It should respond warmly, stay focused on pet safety, ask targeted clarifying questions before making triage judgments, avoid giving medication dosages, and avoid pretending to be a veterinarian.",
+    "criteria": "Evaluate whether the assistant manages this multi-turn pet-health conversation effectively. The assistant should ask targeted clarification questions that help triage the case, ask for key differentiating factors relevant to vomiting, stop routine questioning and escalate immediately if red-flag symptoms appear, and remember information already provided without asking for it again. Penalize vague or repetitive questioning, missing critical follow-up questions, continuing a checklist after a clear emergency signal, or re-asking facts the user already gave.",
+    "threshold": 0.7,
+    "pet_profile": {
+      "name": "Biscuit",
+      "species": "dog",
+      "breed": "Cocker Spaniel",
+      "age_in_months": 107,
+      "gender": "female",
+      "neutered_status": "unknown",
+      "weight_latest": 12.4
+    },
+    "memories": [
+      {
+        "memory_type": "baseline",
+        "memory_term": "long",
+        "field": "feeding_method",
+        "value": {
+          "detail": "dry kibble twice daily"
+        }
+      },
+      {
+        "memory_type": "pattern",
+        "memory_term": "mid",
+        "field": "speed_eating_pattern",
+        "value": {
+          "detail": "tends to eat kibble quickly"
+        }
+      },
+      {
+        "memory_type": "snapshot",
+        "memory_term": "short",
+        "field": "joint_support",
+        "value": {
+          "detail": "takes a morning joint supplement for hips"
+        }
+      }
+    ],
+    "recent_turns": [],
+    "user_turns": [
+      "Oh dear, I hope someone can help me. My little Biscuit just threw up all over the kitchen floor and I'm just beside myself. She's my whole world. Is she going to be okay??",
+      "She's a Cocker Spaniel, she'll be 9 in June. It happened maybe 20 minutes ago. Just the once so far. It looked like her dinner came back up, kibble and all. I don't think there was any blood. She ate her supper quite fast tonight.",
+      "Well she's sitting next to me right now looking at me with those big eyes. Tail's going a little. She seems okay I suppose. And no, I don't think she got into anything. She just had her normal kibble.",
+      "Oh thank goodness. You've made me feel so much better. Should I give her any of that pink stomach medicine? I think I have some Pepto in the cabinet.",
+      "Hi again, it's Margaret. I spoke to you yesterday about my Biscuit being sick. Just wanted to give you an update.",
+      "She's absolutely fine! Ate her chicken and rice this morning, no problems at all. She's been bouncing around the garden like a puppy. I gave her the joint supplement too and that stayed down as well."
+    ],
+    "metadata": {
+      "focus": "clarification_stop_memory_combined",
+      "layer": "handler_blackbox_multiturn"
+    }
+  }
+]

@@ -2,7 +2,9 @@
   "permissions": {
     "allow": [
       "Bash(C:/Users/Yuting/AppData/Local/Programs/Python/Python313/python.exe -m ensurepip)",
-      "Bash(C:/Users/Yuting/AppData/Local/Programs/Python/Python313/python.exe -m pip --version)"
+      "Bash(C:/Users/Yuting/AppData/Local/Programs/Python/Python313/python.exe -m pip --version)",
+      "Bash(python -m py_compile tests/blackbox_singleturn/conftest.py tests/blackbox_singleturn/test_message_handler_blackbox.py tests/blackbox_multiturn/conftest.py tests/blackbox_multiturn/test_message_handler_multiturn.py)",
+      "Bash(python -c \"from deepeval.test_case import TurnParams; print\\([p for p in dir\\(TurnParams\\) if not p.startswith\\(''_''\\)]\\)\")"
     ]
   }
 }
