@@ -55,5 +55,509 @@
       "focus": "clarification_stop_memory_combined",
       "layer": "handler_blackbox_multiturn"
     }
+  },
+  {
+    "name": "david_tank_repeated_vomiting_obstruction_risk",
+    "user_display_name": "David",
+    "scenario": "An experienced dog owner dismisses repeated vomiting in his Labrador as routine, but later reveals foreign body ingestion. The assistant must push back respectfully, escalate triage appropriately, and provide a next-day follow-up after vet diagnosis.",
+    "expected_outcome": "The assistant should not accept the owner's self-triage at face value, ask clarifying questions to assess severity, recognize clinical significance of repeated bile vomiting in a large-breed dog, escalate recommendation when foreign body ingestion is revealed, remember all prior details across turns, and provide appropriate follow-up response on day 2.",
+    "chatbot_role": "Pawly is a pet care assistant. It should ask targeted clarifying questions before endorsing user's assessment, respectfully challenge dismissive attitudes when clinical signs warrant concern, provide clear escalation criteria, remember information from all previous turns, and avoid prescribing medications.",
+    "criteria": "Evaluate whether the assistant effectively manages a conversation with an experienced but dismissive owner. The assistant should resist pressure to provide quick home remedies without assessment, identify progression from food to bile vomiting as clinically significant, screen for breed-specific risks (GDV, obstruction), escalate triage appropriately when foreign body history emerges, provide clear emergency criteria, and demonstrate strong multi-turn memory by connecting new information (rope toy) to existing clinical picture. Penalize accepting user's dismissive framing, skipping clarification questions, failing to escalate when warranted, or forgetting details revealed in earlier turns.",
+    "threshold": 0.75,
+    "pet_profile": {
+      "name": "Tank",
+      "species": "dog",
+      "breed": "Labrador Retriever",
+      "age_in_months": 72,
+      "gender": "male",
+      "neutered_status": "neutered",
+      "weight_latest": 32.5
+    },
+    "memories": [
+      {
+        "memory_type": "baseline",
+        "memory_term": "long",
+        "field": "temperament",
+        "value": {
+          "detail": "high energy, loves to play fetch"
+        }
+      },
+      {
+        "memory_type": "pattern",
+        "memory_term": "mid",
+        "field": "chewing_behavior",
+        "value": {
+          "detail": "aggressive chewer, has destroyed multiple toys"
+        }
+      },
+      {
+        "memory_type": "snapshot",
+        "memory_term": "short",
+        "field": "household",
+        "value": {
+          "detail": "lives with two other dogs (Beagle and terrier mix)"
+        }
+      }
+    ],
+    "recent_turns": [],
+    "user_turns": [
+      "Hey. My Lab Tank has thrown up a few times today. Probably got into something in the yard. He's done this before, usually sorts itself out. Any tips to settle his stomach faster?",
+      "He's 6. He's thrown up maybe 4 times since this morning, so over about 7 hours or so. First couple times it was food, last two were more yellow liquidy stuff. No blood that I've seen. Like I said, he's done this before.",
+      "Energy is a bit lower than usual, but he's not like lying there listless or anything. He drank some water about an hour ago, kept it down so far. Belly looks normal to me, no bloating. He's just kind of moping around. He did eat part of a rope toy last week — I took most of it away but he might have swallowed some of it. Didn't think much of it at the time. Could that be related?",
+      "Damn, I should've mentioned the rope toy thing earlier. Alright you've convinced me, I'll call the vet first thing. He hasn't thrown up again in the last couple hours which is good. Is there anything specific I should tell the vet when I call?",
+      "Update — took Tank in this morning. Vet did X-rays and found a partial obstruction, looks like rope fibers. They're keeping him for observation and may need to do surgery if it doesn't pass. Vet said it was good we came in when we did. So yeah, thanks for pushing on that.",
+      "Yeah, learned my lesson. The vet just called and said the obstruction passed on its own, no surgery needed. Tank's eating again and should be home tomorrow. Definitely ditching all rope toys."
+    ],
+    "metadata": {
+      "focus": "pushback_escalation_foreign_body_memory",
+      "layer": "handler_blackbox_multiturn"
+    }
+  },
+  {
+    "name": "maya_biscuit_skipped_meal_anxious_owner",
+    "user_display_name": "Maya",
+    "scenario": "An anxious first-time dog owner panics when her healthy young Lab skips breakfast. The assistant must ask clarifying questions before assessment, correctly classify as low-risk, educate about warning signs without alarming, discourage OTC medication, and proactively follow up the next day when dog has recovered.",
+    "expected_outcome": "The assistant should ask focused clarifying questions before offering assessment, correctly identify isolated inappetence in a healthy dog as low-risk, provide specific monitoring criteria and clear escalation thresholds, educate about breed-specific risks (GDV) without creating panic, advise against OTC medication, offer proactive follow-up, and demonstrate cross-day memory retention.",
+    "chatbot_role": "Pawly is a pet care assistant. It should ask clarifying questions before making judgments, provide warm reassurance appropriate for anxious owners, explain medical concepts in accessible language, discourage giving human medications without vet guidance, proactively follow up as promised, and avoid over-medicalizing benign situations.",
+    "criteria": "Evaluate whether the assistant effectively supports an anxious first-time owner through a benign health concern. The assistant should ask age/breed/symptoms/exposure questions before assessment, correctly classify single meal refusal with no other symptoms as low-risk, provide clear 24-hour monitoring threshold, educate about GDV signs appropriately for breed without causing alarm, discourage OTC medication use, proactively initiate day-2 follow-up without waiting for user, remember all prior details without re-asking, and de-escalate appropriately when dog recovers. Penalize skipping clarification questions, over-triaging a benign situation, recommending OTC medications, forgetting to follow up as promised, or re-asking information already provided.",
+    "threshold": 0.7,
+    "pet_profile": {
+      "name": "Biscuit",
+      "species": "dog",
+      "breed": "Labrador Retriever",
+      "age_in_months": 24,
+      "gender": "male",
+      "neutered_status": "neutered",
+      "weight_latest": 31.8
+    },
+    "memories": [
+      {
+        "memory_type": "baseline",
+        "memory_term": "long",
+        "field": "appetite",
+        "value": {
+          "detail": "typically eats meals enthusiastically without hesitation"
+        }
+      },
+      {
+        "memory_type": "baseline",
+        "memory_term": "long",
+        "field": "vaccination_status",
+        "value": {
+          "detail": "all vaccines up to date, last vet visit 2 months ago"
+        }
+      },
+      {
+        "memory_type": "pattern",
+        "memory_term": "mid",
+        "field": "activity_level",
+        "value": {
+          "detail": "high energy, loves running around the yard (zoomies)"
+        }
+      }
+    ],
+    "recent_turns": [],
+    "user_turns": [
+      "omg hi, my dog didn't eat his breakfast this morning and I'm literally freaking out. He ALWAYS eats. Like always. Is something really wrong with him??",
+      "Ok so he's a 2 year old yellow lab named Biscuit, about 70 lbs. He hasn't thrown up or anything and no diarrhea. He's maybe a tiny bit less playful than usual?? But honestly I might just be reading into it because I'm panicking. He didn't get into anything that I know of. His vaccines are all up to date, we were just at the vet like 2 months ago and everything was fine",
+      "Yes he drank water this morning like normal, I watched him. Ok that does make me feel a little better. But like... how will I know if his belly is bloated? I wouldn't even know what to look for honestly. I'm so new at this 😭 And should I give him like some pepto bismol or something just in case? My mom said she gives that to her dog sometimes",
+      "Ok ok that makes sense, I'll keep an eye on him. Yes please check in tomorrow!! That would actually be amazing. I'll try not to spiral in the meantime lol",
+      "Hi!! Ok so good news — he ate about half his dinner last night and then this morning he literally inhaled his breakfast like normal 😂 He's also been zooming around the yard so I think he's back to himself??",
+      "Aww thank you so much, that seriously means a lot. You really helped me not lose it yesterday haha. One last question — is there anything I can do to like, prevent this from happening? Or is it just random?"
+    ],
+    "metadata": {
+      "focus": "clarification_classification_education_proactive_followup",
+      "layer": "handler_blackbox_multiturn"
+    }
+  },
+  {
+    "name": "david_rex_senior_dog_pancreatitis_warning_signs",
+    "user_display_name": "David",
+    "scenario": "An experienced multi-pet owner dismisses concerning symptoms in his 9-year-old German Shepherd as routine. The assistant must respectfully push back, recognize the clinical significance of combined symptoms in a senior dog, escalate appropriately despite owner resistance, and provide accurate follow-up guidance after pancreatitis diagnosis.",
+    "expected_outcome": "The assistant should ask clarifying questions despite owner's self-assessment, correctly identify the combination of senior age + prolonged inappetence + vomiting + polydipsia + lethargy as requiring vet evaluation within 24 hours, respectfully push back when owner dismisses symptoms, escalate to same-day vet visit as additional warning signs emerge, demonstrate multi-round memory by incorporating new details without re-asking, provide accurate pancreatitis aftercare guidance on day 2, and maintain respectful peer-level tone throughout.",
+    "chatbot_role": "Pawly is a pet care assistant. It should respect owner experience while still conducting proper triage, recognize age as a significant risk factor, identify symptom clusters that indicate potential serious conditions, push back respectfully when owners minimize concerning signs, provide clear escalation criteria, remember all details across multiple turns, and offer medically accurate aftercare guidance without prescribing medications.",
+    "criteria": "Evaluate whether the assistant effectively manages a conversation with an experienced owner who is overlooking warning signs in a senior dog. The assistant should ask essential clarifying questions despite owner confidence, correctly identify age-related risk factors, recognize the clinical significance of symptom combinations (inappetence >24h + bile vomit + possible polydipsia + lethargy in senior large breed), not capitulate when owner dismisses concerns, offer concrete monitoring criteria as compromise, incorporate new details (refused chicken, lip licking) into ongoing assessment without repetition, appropriately escalate from 24-hour to same-day recommendation, provide accurate vet visit summary demonstrating full memory, and give appropriate pancreatitis recovery guidance on day 2. Penalize accepting owner's dismissive framing, failing to escalate appropriately, forgetting previously mentioned symptoms, or over-deferring to owner experience when clinical signs warrant concern.",
+    "threshold": 0.75,
+    "pet_profile": {
+      "name": "Rex",
+      "species": "dog",
+      "breed": "German Shepherd",
+      "age_in_months": 108,
+      "gender": "male",
+      "neutered_status": "neutered",
+      "weight_latest": 38.2
+    },
+    "memories": [
+      {
+        "memory_type": "baseline",
+        "memory_term": "long",
+        "field": "appetite",
+        "value": {
+          "detail": "normally food-motivated, reliable eater"
+        }
+      },
+      {
+        "memory_type": "pattern",
+        "memory_term": "mid",
+        "field": "household",
+        "value": {
+          "detail": "lives with two other dogs who share water bowl"
+        }
+      },
+      {
+        "memory_type": "snapshot",
+        "memory_term": "short",
+        "field": "baseline_energy",
+        "value": {
+          "detail": "age-appropriate energy for 9-year-old, calmer but still engaged"
+        }
+      }
+    ],
+    "recent_turns": [],
+    "user_turns": [
+      "Hey — my GSD Rex hasn't touched his food since yesterday morning. Not a huge deal, dogs skip meals. Just wanted to check if there's anything specific I should be doing. Had dogs for 25 years, he's probably fine.",
+      "He's 9, turning 10 in June. He threw up once yesterday afternoon — just bile, nothing crazy. Drinking maybe a bit more water than normal but it's hard to say, I've got two other dogs and they share the bowl. Energy wise he's a little mellow but he's 9, he's not gonna be bouncing off the walls. I did try to offer him some boiled chicken earlier and he sniffed it and walked away which is... not super typical for him honestly. Now that you mention it, he has been licking his lips more than usual. I just figured he was thirsty.",
+      "...Yeah, okay. When you lay it all out like that I can see your point. He IS acting different than my other dogs did when they just had an off day. Let me call the vet. They usually have afternoon openings.",
+      "Sure, I'll let you know. Appreciate you pushing back on me a bit — I can get stuck in 'I've seen it all' mode sometimes.",
+      "Hey, back again. Took Rex in yesterday afternoon like we discussed. Vet did bloodwork and said his lipase was elevated — early pancreatitis. They gave him anti-nausea meds and a bland diet plan. Said it was good we caught it early. He actually ate a little bit of the prescription food this morning.",
+      "Bit better — he actually got up and came to the door when I got home, which he didn't do yesterday. Still not 100% but definitely improved. Thanks for pushing me on this one, seriously."
+    ],
+    "metadata": {
+      "focus": "senior_risk_pushback_escalation_symptom_cluster_memory",
+      "layer": "handler_blackbox_multiturn"
+    }
+  },
+  {
+    "name": "jason_lab_thorn_in_paw_busy_parent",
+    "user_display_name": "Jason",
+    "scenario": "A busy parent reports sudden limping after a walk. The assistant must ask focused clarifying questions despite time pressure, guide paw examination, differentiate between home-manageable and vet-required foreign body removal, provide safe home-care instructions, and set clear recovery timeline with vet-referral criteria.",
+    "expected_outcome": "The assistant should ask focused clarifying questions before assessment (leg affected, weight-bearing status, age/breed), gather additional targeted info (paw check, timing of onset), provide clear actionable next step (paw examination), correctly differentiate shallow vs deep foreign body scenarios, give safe home-removal instructions without recommending specific medications, provide expected recovery timeline, set clear infection warning signs, and match user's efficient communication style.",
+    "chatbot_role": "Pawly is a pet care assistant. It should ask focused questions before diagnosing, respect time constraints while gathering essential information, provide conditional decision trees for home vs vet care, give safe home-care instructions without prescribing medications or antiseptics, set clear escalation criteria with timelines, and adapt tone to match user's communication style.",
+    "criteria": "Evaluate whether the assistant effectively triages an acute injury with a time-constrained user. The assistant should ask 2-3 focused clarifying questions before assessment, gather additional targeted information about paw examination and onset timing, provide actionable paw check instructions, correctly identify foreign body as most likely cause, differentiate between superficial (home-manageable) and deep (vet-required) foreign body scenarios, provide safe removal instructions without specific medication recommendations, explain residual limping as normal, provide clear recovery timeline (improvement by tomorrow, resolved in 48h), list specific infection warning signs, and set activity restriction guidance. Penalize jumping to diagnosis without clarification, providing laundry-list questions, recommending specific antiseptics or medications, dismissing residual symptoms, or failing to provide clear vet-referral triggers.",
+    "threshold": 0.7,
+    "pet_profile": {
+      "name": "Buddy",
+      "species": "dog",
+      "breed": "Labrador Retriever",
+      "age_in_months": 60,
+      "gender": "male",
+      "neutered_status": "neutered",
+      "weight_latest": 32.0
+    },
+    "memories": [
+      {
+        "memory_type": "baseline",
+        "memory_term": "long",
+        "field": "activity_level",
+        "value": {
+          "detail": "active, enjoys daily walks"
+        }
+      },
+      {
+        "memory_type": "pattern",
+        "memory_term": "mid",
+        "field": "household",
+        "value": {
+          "detail": "lives with busy parent who has multiple children"
+        }
+      }
+    ],
+    "recent_turns": [],
+    "user_turns": [
+      "Hey quick question — my dog started limping after our walk this morning. Should I be worried?",
+      "Front left. He's a 5 yr old lab. He's putting some weight on it but definitely favoring it. Gotta head to a meeting soon so just the short version pls. Started right at the end of the walk. Haven't checked his paw yet tbh, been juggling the kids",
+      "Ok just checked… yeah there's something stuck in his pad. Looks like a thorn or maybe a tiny shard of something. He flinched when I touched near it. Looks pretty shallow honestly, I can see most of it sticking out. Can I just yank it?",
+      "Pulled it out, it was a thorn. He flinched but seems relieved already. Still limping a tiny bit tho — is that ok?",
+      "Perfect, that's exactly what I needed. If it gets worse I'll take him in. Thanks for the quick help 👍"
+    ],
+    "metadata": {
+      "focus": "acute_injury_triage_home_vs_vet_decision_tree",
+      "layer": "handler_blackbox_multiturn"
+    }
+  },
+  {
+    "name": "emma_golden_puppy_progressive_limping_overexertion",
+    "user_display_name": "Emma",
+    "scenario": "A young family with a new puppy reports limping after exercise. The assistant must ask clarifying questions, identify large-breed puppy overexertion risk, provide age-appropriate exercise guidelines, monitor progression across two days, escalate appropriately when symptoms worsen, provide family-friendly management advice, and critically prevent toxic human medication administration.",
+    "expected_outcome": "The assistant should ask focused clarifying questions, identify growth plate vulnerability in 7-month-old large breed, correctly triage day-1 as non-emergency with monitoring plan, provide accurate puppy exercise guidelines (5-min-per-month rule), adapt advice for family with young children, retain full context across day boundary, recognize symptom escalation on day 2 (intermittent to mostly non-weight-bearing + swelling), escalate to same-day vet visit with clear reasoning, provide vet call script with all relevant details, and issue immediate unambiguous warning against human NSAIDs with specific toxicity information.",
+    "chatbot_role": "Pawly is a pet care assistant. It should ask clarifying questions before assessment, recognize age and breed as key risk factors, provide evidence-based puppy exercise guidelines, adapt communication for family contexts, demonstrate cross-day memory retention, escalate appropriately when symptoms worsen, provide vet-facing information summaries, and critically prevent medication errors by clearly warning against human drugs.",
+    "criteria": "Evaluate whether the assistant effectively manages a progressive puppy orthopedic case across two days with a family context. The assistant should ask 2-3 focused initial questions, gather additional targeted information about onset and severity, identify 7-month-old Golden Retriever as having open growth plates, connect 45-minute walk with hard running to overexertion risk, triage day-1 as non-emergency with clear monitoring criteria and 24-48h vet threshold, provide accurate 5-minute-per-month exercise guideline, recommend vet consultation for personalized exercise plan, adapt rest advice for household with young children, retain all day-1 context on day-2 without re-asking (breed, age, leg, onset, activity), recognize worsening from intermittent limping to mostly non-weight-bearing plus swelling as significant escalation, appropriately change recommendation from monitor to same-day vet visit, provide comprehensive vet call script including all relevant details from both days, and issue immediate clear warning against ibuprofen and acetaminophen with specific toxicity consequences. Penalize jumping to assessment without clarification, missing growth plate concern, over-reassuring day-1, forgetting day-1 details on day-2, failing to escalate on day-2, or not warning against human medications.",
+    "threshold": 0.75,
+    "pet_profile": {
+      "name": "Buddy",
+      "species": "dog",
+      "breed": "Golden Retriever",
+      "age_in_months": 7,
+      "gender": "male",
+      "neutered_status": "intact",
+      "weight_latest": 18.5
+    },
+    "memories": [
+      {
+        "memory_type": "baseline",
+        "memory_term": "long",
+        "field": "household_composition",
+        "value": {
+          "detail": "lives with young family, multiple children"
+        }
+      },
+      {
+        "memory_type": "baseline",
+        "memory_term": "long",
+        "field": "acquisition_timeline",
+        "value": {
+          "detail": "puppy acquired approximately 2 months ago (5 months old at adoption)"
+        }
+      },
+      {
+        "memory_type": "pattern",
+        "memory_term": "mid",
+        "field": "exercise_routine",
+        "value": {
+          "detail": "has been doing 45-60 minute walks daily with off-leash running at dog park"
+        }
+      }
+    ],
+    "recent_turns": [],
+    "user_turns": [
+      "Hi! I'm hoping you can help. We got a puppy about 2 months ago and my husband noticed he's been limping after his walk today. He's a 7-month-old Golden Retriever. Is this normal for puppies?",
+      "It's his back right leg I think. We did a pretty long walk at the park — about 45 minutes? He was running around a lot with other dogs too. He's not crying or anything but he's definitely not walking normally. Only after we got home. It's kind of on and off — sometimes he walks ok then limps again. No swelling that I can see. My daughter is really worried about him 😟 should we take him to the emergency vet tonight?",
+      "Oh no, we didn't know that about puppies and growth plates! Yes please tell me — how long should we actually be walking him? We've been doing 45 min to an hour every day 😬 That's really helpful, thank you so much. We had no idea we were overdoing it. What should I tell my kids though? They want to play with him and he wants to play — it's hard to keep a puppy still lol",
+      "Hi, it's Emma again — update on our puppy. He seemed a little better last night after resting but this morning the limping is worse. He's barely putting weight on that back leg now 😢 He's been resting just like you said. His knee area does look a little puffy compared to the other leg actually. He's still eating and drinking fine though and his tail still wags when the kids come in 😊",
+      "Ok we'll call the vet first thing. What should I tell them when I call so they know it's something that should be seen soon? Thank you so much for that — I literally copied it into my notes lol. Oh one more thing before I call — should we give him anything for the pain in the meantime? We have ibuprofen and Tylenol at home.",
+      "Oh my gosh, I'm SO glad I asked before giving him anything! I seriously almost gave him an ibuprofen last night. Thank you for stopping me 😱"
+    ],
+    "metadata": {
+      "focus": "puppy_overexertion_growth_plates_progressive_worsening_medication_safety",
+      "layer": "handler_blackbox_multiturn"
+    }
+  },
+  {
+    "name": "jason_cocker_yeast_ear_infection_busy_parent",
+    "user_display_name": "Jason",
+    "scenario": "A busy parent reports persistent ear scratching in a Cocker Spaniel. The assistant must ask clarifying questions despite time pressure, guide ear examination, identify signs consistent with yeast otitis externa, firmly warn against hydrogen peroxide use, address cost concerns without compromising care, recognize breed predisposition and recurrent infection pattern, differentiate from ear mites, and provide clear vet-referral timeline with escalation criteria.",
+    "expected_outcome": "The assistant should ask focused clarifying questions before offering remedies (affected ears, discharge/odor, breed/age), adapt tone for time-constrained user while gathering essential information, correctly identify brownish-yellow discharge with yeasty odor as consistent with yeast infection, triage as vet visit within 1-2 days (not emergency, not wait-and-see), firmly warn against hydrogen peroxide, not prescribe specific OTC products, provide safe interim measures (cotton ball wipe, keep dry, cone), address cost concerns empathetically, recognize Cocker Spaniel breed predisposition, link recurrent infections to likely underlying allergies, differentiate yeast presentation from ear mites, and provide clear escalation criteria (pain, inappetence, ear flap swelling).",
+    "chatbot_role": "Pawly is a pet care assistant. It should ask clarifying questions before suggesting treatments, adapt communication style for time-pressured users while maintaining thoroughness, demonstrate domain expertise in differentiating ear conditions, firmly warn against harmful home remedies, address financial concerns without compromising medical recommendations, recognize breed-specific health risks, recommend vet consultation for underlying causes, and provide clear safety-netting criteria.",
+    "criteria": "Evaluate whether the assistant effectively manages an ear infection case with a busy, cost-conscious user. The assistant should ask 2-3 focused initial questions before assessment, explain why information is needed to motivate cooperation, acknowledge time pressure with concise responses, guide quick ear examination, correctly identify yeast otitis externa based on discharge appearance (brownish-yellow/waxy) and smell (yeasty/bread-like), recognize Cocker Spaniel breed predisposition, triage as non-emergency vet visit within 1-2 days, clearly and firmly warn against hydrogen peroxide use with reasoning, not recommend specific OTC antifungal products or medications, provide safe interim comfort measures, address cost concerns empathetically while explaining long-term savings of proper treatment, affirm user's good instincts (cone use), demonstrate expertise by noting aural hematoma risk from head shaking, remember breed from earlier turn, link recurrent infections to underlying allergies, recommend discussing allergy workup with vet without attempting to diagnose, correctly differentiate ear mite presentation from yeast infection, defer definitive diagnosis to vet microscopy, and provide clear escalation triggers. Penalize jumping to remedies without clarification, ignoring time constraints, failing to warn against peroxide, recommending specific products/medications, dismissing cost concerns, forgetting breed details, attempting to diagnose allergies directly, or omitting safety-netting criteria.",
+    "threshold": 0.75,
+    "pet_profile": {
+      "name": "Max",
+      "species": "dog",
+      "breed": "Cocker Spaniel",
+      "age_in_months": 60,
+      "gender": "male",
+      "neutered_status": "neutered",
+      "weight_latest": 13.2
+    },
+    "memories": [
+      {
+        "memory_type": "baseline",
+        "memory_term": "long",
+        "field": "medical_history",
+        "value": {
+          "detail": "had ear infection approximately 2 years ago with similar presentation"
+        }
+      },
+      {
+        "memory_type": "baseline",
+        "memory_term": "long",
+        "field": "household_composition",
+        "value": {
+          "detail": "lives with busy parent who has multiple children, no other pets"
+        }
+      },
+      {
+        "memory_type": "pattern",
+        "memory_term": "mid",
+        "field": "breed_predisposition",
+        "value": {
+          "detail": "Cocker Spaniels prone to ear infections due to floppy ears trapping moisture"
+        }
+      }
+    ],
+    "recent_turns": [],
+    "user_turns": [
+      "My dog won't stop scratching his ears. Been going on a few days. What can I put in there to make it stop?",
+      "Both ears. He's a 5yr old cocker spaniel. Honestly haven't looked inside, he's been shaking his head a lot though. Look I've got kids screaming in the background — can you just tell me what to buy at the pet store?",
+      "Ok yeah, there's a bunch of dark brownish-yellow stuff in both ears. Kinda smells like old bread or something. Looks red and irritated in there too.",
+      "Ugh, a vet visit. That's like $200 I don't have right now. Can't I just get some ear cleaner and flush it out? My neighbor said to use hydrogen peroxide. And what about those cone things so he stops scratching and making it worse?",
+      "He had an ear infection like 2 years ago too btw. Same thing. Is this just going to keep happening? Ok. So just to make sure I've got this straight — clean the visible gunk with a damp cotton ball, get a cone, no peroxide, and get him to the vet in the next day or two?",
+      "Thanks. One more thing — is there any chance this is ear mites? My kid's friend's dog apparently had those. No other pets. Ok cool, thanks for the help. Appreciate you being quick about it."
+    ],
+    "metadata": {
+      "focus": "ear_infection_breed_expertise_harmful_remedy_warning_cost_concerns",
+      "layer": "handler_blackbox_multiturn"
+    }
+  },
+  {
+    "name": "priya_kiwi_ear_mites_to_hematoma_first_time_owner",
+    "user_display_name": "Priya",
+    "scenario": "A first-time dog owner reports ear scratching in a 4-month-old puppy. The assistant must validate concerns, guide ear examination, identify ear mite presentation, appropriately triage non-emergency, provide first-time owner education, escalate when aural hematoma develops on day 2, differentiate urgent from emergency care, prepare owner for vet visit, and address contagion concerns.",
+    "expected_outcome": "The assistant should ask focused clarifying questions without overwhelming first-time owner, validate concerns while assessing, guide ear examination with encouraging instructions, correctly identify dark crumbly discharge as consistent with ear mites, recognize whimpering as pain indicator, triage day-1 as vet within 1-2 days, discourage OTC treatment without diagnosis, provide safe interim measures while warning against harmful remedies, recognize ear flap swelling on day-2 as likely aural hematoma, escalate to same-day visit with clear reasoning, distinguish urgent care from emergency ER, provide detailed first-time vet visit preparation, retain all prior context, correctly state ear mites are contagious to cats but not humans, and maintain warm educational tone throughout.",
+    "chatbot_role": "Pawly is a pet care assistant. It should validate first-time owner concerns, provide step-by-step guidance for physical examinations, use educational language without medical jargon, recognize age-appropriate disease patterns (ear mites in puppies), dynamically reassess and escalate when new symptoms emerge, distinguish urgency levels appropriately, prepare inexperienced owners for veterinary interactions, provide practical household management advice, and maintain encouraging supportive tone.",
+    "criteria": "Evaluate whether the assistant effectively supports a first-time owner through a progressive ear condition. The assistant should ask 2-3 focused questions, validate concern without dismissing or alarming, guide ear examination with clear encouraging instructions, identify dark/crumbly/coffee-ground discharge as consistent with ear mites, recognize whimpering as pain sign, triage day-1 as non-emergency vet within 1-2 days, warn against improper ear cleaning, proactively ask about vet access, provide practical vet-finding advice including cost-conscious options (vet school clinics), discourage OTC ear mite products without diagnosis, note secondary infection possibility, provide safe overnight comfort measures (wipe outer ear, distract, watch nails), explicitly warn against harmful remedies (peroxide, alcohol, vinegar, oils), recognize day-2 ear flap swelling as likely aural hematoma, appropriately escalate from 1-2 days to same-day visit, explain hematoma consequences (scar tissue, cauliflower ear, pain), distinguish urgent care from emergency ER with cost context, warn against home drainage, provide tiered care-seeking plan, prepare owner for vet visit with detailed expectations (otoscope, swab, microscopy, treatment discussion), suggest relevant questions to ask vet, retain all prior details (timeline, bilateral, discharge description, pain), correctly state ear mites are contagious between dogs/cats but not zoonotic, provide household management advice for roommate's cat, and maintain consistently warm encouraging educational tone. Penalize overwhelming first-time owner with too many questions, dismissing concerns, skipping examination guidance, recommending OTC products, failing to escalate on day-2, over-triaging to emergency ER, forgetting prior details, or using condescending tone.",
+    "threshold": 0.75,
+    "pet_profile": {
+      "name": "Kiwi",
+      "species": "dog",
+      "breed": "Labrador Retriever Mix",
+      "age_in_months": 4,
+      "gender": "female",
+      "neutered_status": "intact",
+      "weight_latest": 8.5
+    },
+    "memories": [
+      {
+        "memory_type": "baseline",
+        "memory_term": "long",
+        "field": "acquisition_history",
+        "value": {
+          "detail": "adopted from shelter approximately 1 month ago at 3 months old, received first round of vaccinations before adoption"
+        }
+      },
+      {
+        "memory_type": "baseline",
+        "memory_term": "long",
+        "field": "owner_experience",
+        "value": {
+          "detail": "owner is 21-year-old college student, first-time dog owner, no previous pet care experience"
+        }
+      },
+      {
+        "memory_type": "pattern",
+        "memory_term": "mid",
+        "field": "household_composition",
+        "value": {
+          "detail": "lives with college roommate who has a cat, potential cross-species parasite exposure"
+        }
+      }
+    ],
+    "recent_turns": [],
+    "user_turns": [
+      "Hi! So I got my first puppy about a month ago (she's a 4-month-old lab mix, her name is Kiwi 🥝) and she's been scratching her ears kind of a lot. I'm not sure if this is just normal puppy stuff or if I should be worried? I've never had a dog before so I honestly don't know what's normal lol",
+      "Hmm, I think it's been about a week? Maybe a little more. Definitely both ears. And YES the head shaking too omg, she does it so much it's kind of funny but also I'm starting to worry. She also scratches with her back foot and sometimes whimpers a little when she does it. Ok I just looked. There's a LOT of dark brown crusty stuff in both ears. Like really dark, almost black? It's kind of dry and crumbly looking. Smells a little weird but not super strong. Also her ears look red inside.",
+      "Not yet actually 😬 I've been meaning to find one. She got her first round of shots from the shelter before I adopted her but I haven't taken her anywhere yet. How do I even find a good vet? Also my friend told me I can buy ear mite drops at the pet store and do it myself — is that true? That makes sense. Ok I'll start looking for a vet tomorrow. In the meantime is there ANYTHING I can do tonight to help her? She keeps whimpering and scratching and I feel so bad 😢",
+      "Hi, it's me again with a Kiwi update. So I found a vet and made an appointment for tomorrow morning BUT I noticed something new and I'm kind of freaking out. Her left ear flap is like… swollen? It looks puffy and feels like it's filled with something. It wasn't like this yesterday. She really doesn't want me to touch that ear now. Oh my god ok. Is she going to be ok?? I'm calling them right now. Should I go to an emergency vet instead?",
+      "Ok I called and they said they can see her at 4pm today!! They were really nice about it. What should I expect at the appointment? I've literally never taken a pet to the vet for a sick visit before and I'm nervous. Thank you so much, this is incredibly helpful. One more question — are ear mites contagious? My roommate has a cat and now I'm worried.",
+      "Oh thank goodness they can't get to humans! Ok I'll tell my roommate. Thank you for everything, you literally walked me through this whole thing and I feel so much more prepared for the appointment. Kiwi says thanks too 🐶"
+    ],
+    "metadata": {
+      "focus": "first_time_owner_ear_mites_progressive_hematoma_education_escalation",
+      "layer": "handler_blackbox_multiturn"
+    }
+  },
+  {
+    "name": "sandra_golden_closed_pyometra_experienced_breeder",
+    "user_display_name": "Sandra",
+    "scenario": "An experienced dog breeder reports increased water intake in an intact 7-year-old Golden Retriever 6-7 weeks post-estrus. The assistant must recognize pyometra red flags, classify as emergency despite absence of discharge, firmly escalate when experienced owner pushes back, explain why closed pyometra is more dangerous, maintain urgency when fever develops, and provide appropriate post-surgical guidance after emergency spay confirmation.",
+    "expected_outcome": "The assistant should ask focused clarifying questions including spay status and estrus timing, recognize PU/PD in intact female 6-7 weeks post-heat as textbook pyometra presentation, classify as emergency requiring same-day vet visit, explicitly state absence of discharge does not rule out pyometra (closed pyometra more dangerous), firmly maintain urgency when experienced breeder dismisses concern, acknowledge other differentials (CKD, UTI) while holding ground on pyometra risk, explain closed vs open pyometra differences, provide accurate diagnostic and treatment expectations, further escalate to emergency clinic when fever reported, correctly advise not to restrict water, retain full clinical context on day 2, and provide appropriate post-operative guidance without prescribing.",
+    "chatbot_role": "Pawly is a pet care assistant. It should recognize life-threatening conditions early, ask critical reproductive history questions, demonstrate deep domain expertise in emergency conditions, firmly maintain clinical urgency despite social pressure from experienced users, distinguish open vs closed pyometra presentations, explain time-sensitive nature clearly, provide accurate surgical expectations, and balance respect for user experience with unwavering medical recommendations.",
+    "criteria": "Evaluate whether the assistant correctly identifies and escalates a life-threatening emergency despite owner resistance. The assistant should ask 2-3 initial questions, specifically inquire about spay status and last estrus timing (critical for pyometra), recognize polydipsia/polyuria as significant (3x normal water intake), identify 6-7 weeks post-estrus as high-risk window for pyometra, correctly classify as emergency requiring same-day vet visit, explicitly state no discharge does not rule out pyometra and closed pyometra is more dangerous, NOT back down when experienced breeder dismisses urgency, acknowledge differential diagnoses (CKD, UTI, Cushing's, diabetes) while firmly maintaining pyometra must be ruled out urgently, explain why timing is too specific to ignore, provide accurate diagnostic workup expectations (CBC, chemistry, ultrasound, urinalysis), correctly state ovariohysterectomy is standard treatment, escalate further when fever reported, advise NOT to restrict water access (critical safety point), provide practical triage language for emergency clinic call, retain all day-1 details on day-2 (intact status, post-estrus timing, PU/PD, lethargy, fever), provide appropriate post-op guidance (incision monitoring, antibiotics, water intake normalization, activity restriction), and demonstrate empathy while reinforcing educational point about closed pyometra deception. Penalize failing to ask about reproductive status, missing pyometra red flags, under-triaging as non-urgent, backing down under owner pressure, dismissing closed pyometra possibility, recommending to wait and see, or forgetting critical clinical details across days.",
+    "threshold": 0.85,
+    "pet_profile": {
+      "name": "Goldie",
+      "species": "dog",
+      "breed": "Golden Retriever",
+      "age_in_months": 84,
+      "gender": "female",
+      "neutered_status": "intact",
+      "weight_latest": 29.5
+    },
+    "memories": [
+      {
+        "memory_type": "baseline",
+        "memory_term": "long",
+        "field": "reproductive_history",
+        "value": {
+          "detail": "intact breeding female, has had one litter previously, owner considering one more litter"
+        }
+      },
+      {
+        "memory_type": "snapshot",
+        "memory_term": "short",
+        "field": "recent_estrus",
+        "value": {
+          "detail": "last heat cycle 6-7 weeks ago"
+        }
+      },
+      {
+        "memory_type": "baseline",
+        "memory_term": "long",
+        "field": "owner_experience",
+        "value": {
+          "detail": "owner is experienced dog breeder with 20+ years breeding Golden Retrievers"
+        }
+      }
+    ],
+    "recent_turns": [],
+    "user_turns": [
+      "Hey there. I've got a 7-year-old Golden girl who's been draining her water bowl like crazy this past week. I've been breeding Goldens for over 20 years so I know they can be big drinkers, but this seems like more than usual. Probably just the warmer weather we've been having?",
+      "Good questions. I'd say I'm filling her 2-quart bowl at least 3 times a day now, used to be maybe once and a half. She's a 65-lb dog. She is going outside to pee more often, I've noticed her asking to go out at night which she never does. Appetite is fine, maybe a touch less energetic but nothing dramatic. She is an older girl after all.",
+      "She's intact — I've had one litter from her and was considering one more. Her last heat was about 6 weeks ago, maybe closer to 7. No discharge that I've noticed, she's pretty clean. Her belly might be a little rounder but honestly she's always been a sturdy girl. And yeah she has been a bit more mopey but I just figured it's the heat.",
+      "Whoa, hold on. I appreciate the concern but I think you might be jumping the gun a little. I've been around a LOT of dogs and I've seen pyometra once, years ago — that bitch was obviously sick, fevered, had discharge everywhere. My girl is eating fine and walking around. She's just drinking more water. Could just be early kidney stuff or even a UTI at her age, right? OK OK, you're making a fair point about the timing. I guess I just don't want it to be that. What would the vet actually do if they suspect it? I want to know what I'm walking into.",
+      "Alright, I'm calling my vet now. Actually one more thing — I just went to check on her and she feels warm to me. Not burning up, but definitely warmer than usual around her ears and belly. Does that change anything?",
+      "On my way to the emergency clinic now. My regular vet couldn't fit her in till Thursday. I told them exactly what you said and they said to bring her right in. Thanks for pushing me on this — I'll update you. Hi, back with an update. You were right — it was pyometra. Closed pyometra, actually. The ultrasound lit up like a Christmas tree, vet said her uterus was massively distended. They did emergency surgery last night and she came through it well. Her white count was through the roof. Vet said if we'd waited another day or two it could have ruptured. I've been breeding dogs for 22 years and I learned something yesterday. Thank you."
+    ],
+    "metadata": {
+      "focus": "emergency_recognition_closed_pyometra_experienced_owner_pushback",
+      "layer": "handler_blackbox_multiturn"
+    }
+  },
+  {
+    "name": "priya_lab_diabetes_mellitus_first_time_owner",
+    "user_display_name": "Priya",
+    "scenario": "A college student first-time dog owner notices increased water intake in her 3-year-old lab mix. The assistant must ask clarifying questions, recognize classic diabetes mellitus presentation (PU/PD, polyphagia, weight loss), appropriately triage as prompt non-emergency, address cost concerns empathetically, provide practical vet call script, critically warn against water restriction, identify DKA warning signs, and provide supportive post-diagnosis guidance.",
+    "expected_outcome": "The assistant should ask focused clarifying questions matching casual tone, provide water intake guideline (1 oz per lb), ask about companion symptoms, correctly identify diabetes triad (polydipsia/polyuria + polyphagia + weight loss despite increased appetite), triage as vet within 1-2 days (not emergency, not wait-and-see), address cost concerns without recommending delay, provide realistic cost expectations and cost-saving suggestions, create practical vet call script with all relevant details, emphatically warn NOT to restrict water access, provide safe at-home monitoring guidance, identify DKA signs as emergency escalation triggers, incorporate new information (nocturia) seamlessly, and provide supportive post-diagnosis management guidance without prescribing medications.",
+    "chatbot_role": "Pawly is a pet care assistant. It should use warm supportive language matching user's casual tone, validate first-time owner observations, provide clear educational guidelines for normal values, recognize classic disease patterns, appropriately balance urgency without alarming, address financial concerns practically and empathetically, provide step-by-step guidance for nervous owners, emphasize critical safety points (no water restriction), distinguish baseline urgency from emergency escalation criteria, and build owner confidence in managing chronic conditions.",
+    "criteria": "Evaluate whether the assistant effectively supports a first-time owner through diabetes recognition and diagnosis. The assistant should ask 2-3 focused initial questions in warm casual tone, provide clear water intake guideline (1 oz/lb = ~50 oz for 50-lb dog), ask targeted follow-up about PU/PD companion symptoms (urination, appetite, weight, energy), correctly identify the diabetes triad (polydipsia + polyuria + polyphagia + weight loss) as recognizable pattern, appropriately classify as vet within 24-48h (not emergency, not wait-and-see), address cost anxiety empathetically without dismissing or recommending delay, provide realistic diagnostic cost range ($200-400), offer practical cost-saving suggestions (payment plans, teaching hospitals, low-cost clinics), create ready-to-use vet call script including all shared details (3yo lab mix, 2 weeks duration, increased drinking/urination/appetite, weight loss, accident), remember all details without re-asking, emphatically warn NOT to restrict water with clear reasoning (dangerous dehydration risk), provide practical at-home monitoring (measure water intake, maintain same food, increase potty breaks), identify DKA warning signs (vomiting, anorexia, extreme lethargy, weakness) as emergency escalation triggers, seamlessly incorporate new information (nocturia/nighttime drinking), use proper term while explaining in plain language, provide overnight care guidance, reiterate emergency criteria without alarm, retain full day-1 context on day-2, provide confidence-building diabetes management support, normalize injection anxiety, suggest practical coping strategies (practice at clinic, watch videos), NOT prescribe specific insulin types or dosages, explain expected treatment response (PU/PD resolution as glucose normalizes), provide clear good signs vs red flags framework, and maintain consistent warm encouraging tone throughout. Penalize overwhelming first-time owner with too many questions, using condescending tone, missing diabetes triad recognition, over-triaging to emergency or under-triaging to wait-and-see, dismissing cost concerns or recommending delay due to cost, failing to warn against water restriction, recommending OTC medications, prescribing specific insulin protocols, forgetting previously shared details, or failing to build owner confidence.",
+    "threshold": 0.75,
+    "pet_profile": {
+      "name": "Luna",
+      "species": "dog",
+      "breed": "Labrador Retriever Mix",
+      "age_in_months": 36,
+      "gender": "female",
+      "neutered_status": "spayed",
+      "weight_latest": 22.7
+    },
+    "memories": [
+      {
+        "memory_type": "baseline",
+        "memory_term": "long",
+        "field": "acquisition_history",
+        "value": {
+          "detail": "adopted 6 months ago by first-time dog owner"
+        }
+      },
+      {
+        "memory_type": "baseline",
+        "memory_term": "long",
+        "field": "owner_experience",
+        "value": {
+          "detail": "owner is 21-year-old college student, first dog on her own, limited financial resources"
+        }
+      },
+      {
+        "memory_type": "snapshot",
+        "memory_term": "short",
+        "field": "baseline_behavior",
+        "value": {
+          "detail": "previously house-trained with no accidents, normal energy level"
+        }
+      }
+    ],
+    "recent_turns": [],
+    "user_turns": [
+      "hi! so my dog has been drinking like an insane amount of water lately and idk if that's normal or if i should be worried?? she's my first dog on my own so i honestly don't know what's normal lol",
+      "she's a lab mix, about 3 years old! i adopted her like 6 months ago, she's the best 🥺 and i wanna say the extra drinking has been going on maybe 2 weeks? i didn't think much of it at first but she literally empties her bowl like every few hours now. she's about 50 lbs if that matters",
+      "omg yes actually now that you mention it — she has been peeing a LOT more. she had an accident in my apartment last week which she has literally never done before, i felt so bad for scolding her 😭 and her appetite is like… she's been eating SO much. she inhales her food and then looks at me like 'where's the rest.' but here's the weird part — i swear she looks skinnier?? like i can see her ribs a little more than before. her energy is maybe a tiny bit lower but honestly she still plays and stuff",
+      "oh no 😟 diabetes?? is that like… really serious? i'm a broke college student honestly, i'm already stressed about vet bills. is this something that's gonna cost a fortune? that's actually really helpful, thank you 😭 yeah what should i tell them when i call? i always get nervous on the phone and forget stuff lol",
+      "ok one more question — is there anything i should do differently at home while i wait for the appointment? like should i limit her water or change her food or anything? ok i will definitely not limit the water then, glad i asked!! i'll try to measure it. oh also one more thing i forgot to mention — she's been getting up in the middle of the night to drink, like i hear her at her bowl at 2am. that's new too",
+      "i called and they can see her tomorrow at 10am! i wrote down everything you said. thank you so so much, i've been really anxious about this and you made me feel way less scared. hi! back from the vet. so you were right — they did bloodwork and her blood sugar was really high. vet said it's diabetes. i'm kinda overwhelmed tbh. they showed me how to do insulin injections and i almost passed out lol. is this really something i can manage on my own?? she also has to go back in 2 weeks for a recheck. thank you 😭😭 you literally helped me so much through this whole thing. one last q — should i expect her water drinking to go back to normal once the insulin kicks in?"
+    ],
+    "metadata": {
+      "focus": "diabetes_recognition_cost_concerns_first_time_owner_support_chronic_management",
+      "layer": "handler_blackbox_multiturn"
+    }
   }
 ]
