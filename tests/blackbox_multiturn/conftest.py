@@ -41,6 +41,15 @@ from src.llm.client import GeminiClient, get_gemini_client
 TEST_DATA_DIR = Path(__file__).parent / "test_data"
 
 
+def _detach_router(router: Any) -> None:
+    parent = getattr(router, "parent_router", None)
+    if parent is None:
+        return
+    if router in parent.sub_routers:
+        parent.sub_routers.remove(router)
+    router._parent_router = None
+
+
 def _species(value: str) -> Species:
     return Species(value)
 
@@ -534,6 +543,7 @@ def build_router_runtime(
         dp.message.middleware(SessionMiddleware())
         dp.message.middleware(TestUserContextMiddleware(user, pet))
         dp.message.middleware(RateLimiterMiddleware())
+        _detach_router(message_handler.router)
         dp.include_router(message_handler.router)
         return bot, dp, fake_api, fake_redis
 
