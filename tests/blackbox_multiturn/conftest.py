@@ -50,7 +50,18 @@ def _gender(value: str) -> Gender:
 
 
 def _neutered_status(value: str) -> NeuteredStatus:
-    return NeuteredStatus(value)
+    normalized = str(value).strip().lower()
+    aliases = {
+        "neutered": NeuteredStatus.YES,
+        "spayed": NeuteredStatus.YES,
+        "fixed": NeuteredStatus.YES,
+        "desexed": NeuteredStatus.YES,
+        "intact": NeuteredStatus.NO,
+        "entire": NeuteredStatus.NO,
+    }
+    if normalized in aliases:
+        return aliases[normalized]
+    return NeuteredStatus(normalized)
 
 
 def _memory_type(value: str) -> MemoryType:
