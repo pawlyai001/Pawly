@@ -5,3 +5,4 @@ __pycache__/
 .pytest_cache/
 .env
 .idea/workspace.xml
+tests/blackbox_multiturn/venv/
