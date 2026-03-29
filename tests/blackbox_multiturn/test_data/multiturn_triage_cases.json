@@ -559,5 +559,615 @@
       "focus": "diabetes_recognition_cost_concerns_first_time_owner_support_chronic_management",
       "layer": "handler_blackbox_multiturn"
     }
+  },
+  {
+    "name": "sandra_golden_puppy_bloody_diarrhea_parvo_risk",
+    "user_display_name": "Sandra",
+    "scenario": "An experienced breeder reports bloody diarrhea in an 8-week-old Golden Retriever puppy during weaning. The assistant must ask clarifying questions about stool characteristics and vaccination status before assessment, correctly identify parvo risk factors despite clean breeding environment, push back respectfully when owner dismisses concern, provide biosecurity guidance, and follow up the next day after vet visit confirms stress colitis.",
+    "expected_outcome": "The assistant should ask focused clarifying questions about stool description, scope of illness, systemic symptoms, and critically vaccination status before offering assessment. Should correctly classify watery bloody diarrhea in incompletely vaccinated puppy with lethargy as requiring same-day veterinary evaluation to rule out parvovirus. Should respectfully push back when experienced breeder dismisses concern, maintain same-day recommendation while acknowledging owner expertise, provide appropriate biosecurity measures (isolation, hygiene, bleach disinfection), and demonstrate cross-day memory retention on day-2 follow-up.",
+    "chatbot_role": "Pawly is a pet care assistant. It should ask clarifying questions before making triage judgments, recognize vaccination status as critical risk factor for young puppies, respect breeder experience while still conducting proper triage, push back respectfully when owners minimize concerning signs, provide evidence-based biosecurity protocols, remember all details across day boundaries, and maintain peer-level respectful tone with experienced owners.",
+    "criteria": "Evaluate whether the assistant effectively manages a high-stakes puppy diarrhea case with an experienced breeder. The assistant should ask focused questions about stool characteristics (formed/watery, blood description), scope (single puppy vs litter), and systemic symptoms before assessment, specifically ask about vaccination status as most critical parvo risk factor, correctly identify three key risk factors (watery bloody stool, incomplete vaccination at 8 weeks, reduced energy/appetite), triage as same-day vet visit to rule out parvovirus, acknowledge owner's extensive experience while distinguishing this case from routine weaning diarrhea, maintain same-day recommendation without backing down when owner pushes back, explain why snap test is appropriate risk mitigation, provide interim biosecurity advice including isolation protocol and bleach disinfection (1:32 ratio), list clear emergency escalation criteria for pre-appointment period, proactively offer day-2 follow-up, retain full day-1 context on day-2 without re-asking details, and provide appropriate recovery monitoring guidance. Penalize skipping clarification questions, missing vaccination status question, over-reassuring when clinical signs warrant concern, capitulating to owner pushback, forgetting day-1 details, or failing to provide biosecurity measures.",
+    "threshold": 0.8,
+    "pet_profile": {
+      "name": "Puppy (unnamed litter member)",
+      "species": "dog",
+      "breed": "Golden Retriever",
+      "age_in_months": 2,
+      "gender": "male",
+      "neutered_status": "intact",
+      "weight_latest": 5.8
+    },
+    "memories": [
+      {
+        "memory_type": "pattern",
+        "memory_term": "mid",
+        "field": "breeding_program",
+        "value": {
+          "detail": "owner is experienced breeder with 20+ years breeding Golden Retrievers, maintains controlled clean whelping environment"
+        }
+      },
+      {
+        "memory_type": "snapshot",
+        "memory_term": "short",
+        "field": "litter_context",
+        "value": {
+          "detail": "currently managing full litter of 8-week-old Golden Retriever puppies, started weaning onto kibble 5 days ago"
+        }
+      },
+      {
+        "memory_type": "snapshot",
+        "memory_term": "short",
+        "field": "vaccination_status",
+        "value": {
+          "detail": "litter received first DHPP shots approximately one week ago, only one round completed"
+        }
+      }
+    ],
+    "recent_turns": [],
+    "user_turns": [
+      "Hi there. I have a litter of Golden Retriever puppies, 8 weeks old, and one of them has started passing bloody stool. I've been breeding Goldens for over 20 years so I've seen a lot, but figured I'd ask. I'm guessing it's just the food transition — we started weaning them onto kibble about 5 days ago.",
+      "It's just the one pup, a little male — the rest of the litter seems totally fine. His stool is pretty watery, not formed at all, with bright red blood mixed in. I'd say a fair amount of blood, not just a tiny streak. He hasn't vomited but he does seem a little quieter than his siblings. Still nursing some and picking at the kibble but not as enthusiastic as the others. They got their first DHPP shots about a week ago, so they've only had the one round. They haven't been off my property — I run a very controlled environment.",
+      "Honestly I've been through dozens of litters and loose stool during weaning is just par for the course. I was thinking I'd add some canned pumpkin to his food and switch him to a gentler protein. Do you really think the vet is necessary today? I don't want to overreact. Okay fair enough, you make a good point about the snap test. I'll get him over to my vet this afternoon. Quick question though — should I separate him from the rest of the litter in the meantime?",
+      "That's really helpful, thank you. I've already got a separate heated pen I can move him to. Heading to the vet in about an hour. I'll let you know how it goes.",
+      "Hi, back again! So the vet visit went well yesterday. They ran the parvo snap test and it came back negative — thank goodness. Vet said it looks like stress colitis from the weaning transition, possibly aggravated by the vaccine timing. He's on a bland diet of boiled chicken and rice plus a probiotic paste for the next few days. He's doing better! Stool is still soft but it's actually formed now — not watery anymore. I saw a tiny bit of blood this morning but way less than before.",
+      "This is so helpful, thank you. One more question — when do you think I can start transitioning him back to kibble? I don't want to rush it and set him back, but I also need him eating the same as the rest of the litter eventually since they'll be going to their new homes in a couple weeks. Makes total sense. I'll bring it up with Dr. Patel when we go back. Thanks for everything — you were right to push me to go in yesterday."
+    ],
+    "metadata": {
+      "focus": "clarification_vaccination_parvo_risk_pushback_biosecurity_followup",
+      "layer": "handler_blackbox_multiturn"
+    }
+  },
+  {
+    "name": "david_buster_senior_bloody_stool_melena_emergency",
+    "user_display_name": "David",
+    "scenario": "An experienced multi-pet owner dismisses bloody stool in his 10-year-old Labrador as routine. The assistant must ask clarifying questions, identify critical NSAID use and weight loss as red flags, escalate appropriately to 24-hour vet visit despite owner resistance, provide interim care instructions with emergency criteria, proactively follow up on day 2, and immediately escalate to emergency when stool progresses to melena overnight.",
+    "expected_outcome": "The assistant should ask focused clarifying questions about age, stool characteristics, and systemic symptoms before assessment. Must specifically ask about NSAID use and weight changes in senior dog with GI bleeding. Should correctly identify aspirin use plus weight loss plus bloody stool as requiring vet visit within 24 hours, push back respectfully when owner wants to delay until annual checkup, explain clinical reasoning for urgency, advise immediate aspirin discontinuation, provide interim care instructions with specific melena warning, proactively initiate day-2 follow-up, and immediately escalate to emergency status when melena with vomiting and lethargy develops.",
+    "chatbot_role": "Pawly is a pet care assistant. It should ask clarifying questions before making triage judgments, recognize age and medication history as critical risk factors for GI bleeding, push back respectfully when experienced owners minimize concerning signs in senior pets, provide clear escalation criteria including melena as emergency sign, remember all details across day boundaries, and escalate decisively when symptom progression warrants emergency care.",
+    "criteria": "Evaluate whether the assistant effectively manages a progressive GI bleeding case in a senior dog with an experienced but dismissive owner. The assistant should ask focused questions about age, blood description (bright red vs tarry), and systemic symptoms, specifically ask about NSAID use and weight changes, correctly identify three red flags (chronic aspirin use, unexplained weight loss, persistent bloody stool in 10-year-old), triage as vet visit within 24 hours not one month, respectfully push back when owner wants to delay until annual checkup with clear clinical reasoning, advise immediate aspirin discontinuation with explanation, provide interim bland diet and hydration guidance, provide specific emergency warning signs including melena description, proactively initiate day-2 check-in, retain full day-1 context without re-asking, immediately recognize melena with vomiting and lethargy as emergency, escalate decisively to immediate ER visit, accurately explain melena significance (upper GI bleeding), address cost pushback firmly while remaining empathetic, explain canine compensation and decompensation risk, and provide pre-visit instructions mentioning aspirin history and weight loss from day-1. Penalize skipping clarification questions, missing NSAID or weight loss questions, accepting owner's one-month delay, capitulating when owner pushes back, failing to warn about melena, missing day-2 proactive follow-up, forgetting day-1 details, or wavering on emergency classification when melena develops.",
+    "threshold": 0.8,
+    "pet_profile": {
+      "name": "Buster",
+      "species": "dog",
+      "breed": "Labrador Retriever",
+      "age_in_months": 120,
+      "gender": "male",
+      "neutered_status": "neutered",
+      "weight_latest": 30.2
+    },
+    "memories": [
+      {
+        "memory_type": "baseline",
+        "memory_term": "long",
+        "field": "owner_experience",
+        "value": {
+          "detail": "owner has had dogs his whole life, experienced multi-pet owner"
+        }
+      },
+      {
+        "memory_type": "pattern",
+        "memory_term": "mid",
+        "field": "activity_level",
+        "value": {
+          "detail": "still active for age, but slowing down as expected for senior dog"
+        }
+      },
+      {
+        "memory_type": "snapshot",
+        "memory_term": "short",
+        "field": "medication_use",
+        "value": {
+          "detail": "owner has been giving regular human aspirin a couple times per week for hip stiffness"
+        }
+      },
+      {
+        "memory_type": "snapshot",
+        "memory_term": "short",
+        "field": "weight_trend",
+        "value": {
+          "detail": "has dropped a few pounds over the last couple months, owner attributed to normal aging"
+        }
+      }
+    ],
+    "recent_turns": [],
+    "user_turns": [
+      "Hey, my Lab Buster has had some blood in his poop for a couple days now. Probably nothing — I've had dogs my whole life and this sort of thing usually clears up. Just figured I'd check.",
+      "He's 10, still pretty active for an old guy. The blood is bright red, kinda mixed into the stool. The poop itself is softer than normal but not liquid or anything. He's eating, maybe a little less than usual, and he seems maybe a touch lower energy but honestly at 10 that's not unusual. Nothing dramatic. No diet changes, he eats the same food he's been on for years. No trash raiding. I do give him aspirin sometimes when his hips seem stiff — maybe a couple times a week? Just regular human aspirin. And yeah now that you mention it, he has dropped a few pounds over the last couple months. But he's a 10 year old Lab, I figured he's just slowing down a bit.",
+      "Hmm, I was planning to take him to the vet next month anyway for his annual checkup. Think it can wait til then? He's really not acting that different. Yeah okay, when you put it like that it makes sense. I'll call first thing tomorrow. Should I stop giving him the aspirin in the meantime? Got it, no more aspirin. Anything else I should do for him tonight and tomorrow until I get the appointment?",
+      "Yeah sounds good, thanks for the info. I'll update you tomorrow.",
+      "Hey, actually I'm glad you checked in. Things went downhill overnight. He threw up twice — once around midnight and once this morning. He barely sniffed at his food this morning and didn't eat. And his poop this morning was really dark, almost black and kind of sticky/tar-like? He's been just lying on his bed all morning, doesn't even want to go outside. I'm starting to get worried.",
+      "Really? Like ER-level emergency? He's still getting up to walk around a little, he's just not himself. I don't want to overreact and spend a fortune at the ER if the regular vet can see him this afternoon. Ok you're right, I'm not gonna mess around with this. Grabbing my keys now. Thanks for pushing me on this."
+    ],
+    "metadata": {
+      "focus": "senior_nsaid_gi_bleeding_weight_loss_melena_emergency_escalation",
+      "layer": "handler_blackbox_multiturn"
+    }
+  },
+  {
+    "name": "tom_chester_cavalier_cardiac_cough_resistant_owner",
+    "user_display_name": "Tom",
+    "scenario": "A resistant experienced dog owner dismisses persistent nighttime cough in his 9-year-old Cavalier King Charles Spaniel as a cold. The assistant must ask clarifying questions, recognize breed-specific cardiac risk, identify classic mitral valve disease presentation, push back respectfully against owner resistance and cost concerns, prevent medication sharing, and provide supportive follow-up after murmur diagnosis.",
+    "expected_outcome": "The assistant should ask focused clarifying questions about age, breed, cough duration and characteristics before offering remedies. Must recognize Cavalier King Charles Spaniel breed predisposition to mitral valve disease. Should identify nighttime dry cough plus exercise intolerance as classic cardiac cough presentation. Should triage as vet visit within few days, push back respectfully when owner dismisses concern due to experience and cost, offer practical compromise approach, firmly warn against sharing prescription medication between pets, provide specific cardiac emergency criteria, retain full context on day-3 follow-up, and educate about diagnostic workup purpose to support vet recommendation.",
+    "chatbot_role": "Pawly is a pet care assistant. It should ask clarifying questions before suggesting treatments, demonstrate domain expertise in breed-specific conditions and cardiac vs respiratory cough differentiation, push back respectfully when experienced owners minimize concerning signs, address cost concerns empathetically while supporting necessary diagnostics, firmly warn against medication sharing, provide clear escalation criteria, and maintain supportive non-judgmental tone throughout.",
+    "criteria": "Evaluate whether the assistant effectively manages a cardiac cough case with a resistant, cost-conscious owner. The assistant should ask 2-3 focused initial questions about age, breed, and cough characteristics before assessment, recognize Cavalier King Charles Spaniel as high-risk breed for mitral valve disease, identify nighttime dry cough pattern as classic cardiac cough presentation, ask about exercise intolerance and respiratory rate as cardiac indicators, correctly distinguish this from respiratory infection based on pattern, triage as vet visit within few days (not emergency, not wait-and-see), explain CKCS breed predisposition with accurate prevalence information, maintain recommendation when owner dismisses concern based on experience, acknowledge cost concerns empathetically, offer practical compromise (exam-only visit with auscultation), not back down or recommend unproven home remedies as substitute, provide realistic expectations about diagnostic sensitivity (murmurs can be subtle), list specific cardiac emergency criteria (increased effort breathing, gum/tongue color changes, collapse), firmly warn against sharing prescription cough medication with clear reasoning (different causes, dosing safety, drug interactions, storage concerns), summarize key details for vet visit, retain full context on day-3 including breed and symptom pattern, accurately explain purpose of chest X-rays and echocardiogram, validate grade 3-4 murmur warrants further workup in CKCS, address cost concern while supporting diagnostic recommendation, and maintain respectful supportive tone without gloating. Penalize skipping clarification questions, missing breed-specific risk recognition, failing to ask about exercise tolerance, over-triaging as emergency, capitulating to owner resistance, recommending home remedies for cardiac symptoms, endorsing medication sharing, forgetting breed or symptoms on day-3, or being condescending when owner follows through.",
+    "threshold": 0.8,
+    "pet_profile": {
+      "name": "Chester",
+      "species": "dog",
+      "breed": "Cavalier King Charles Spaniel",
+      "age_in_months": 108,
+      "gender": "male",
+      "neutered_status": "neutered",
+      "weight_latest": 8.1
+    },
+    "memories": [
+      {
+        "memory_type": "baseline",
+        "memory_term": "long",
+        "field": "owner_experience",
+        "value": {
+          "detail": "owner has had dogs his whole life, experienced multi-pet owner"
+        }
+      },
+      {
+        "memory_type": "baseline",
+        "memory_term": "long",
+        "field": "preventive_care",
+        "value": {
+          "detail": "on monthly heartworm prevention (chewable)"
+        }
+      },
+      {
+        "memory_type": "pattern",
+        "memory_term": "mid",
+        "field": "activity_changes",
+        "value": {
+          "detail": "has slowed down over recent months, less enthusiastic about long walks, owner attributed to normal aging"
+        }
+      },
+      {
+        "memory_type": "snapshot",
+        "memory_term": "short",
+        "field": "cough_pattern",
+        "value": {
+          "detail": "dry soft cough for 1.5 weeks, mostly at night or when getting up from sleeping, minimal during day"
+        }
+      }
+    ],
+    "recent_turns": [],
+    "user_turns": [
+      "Hey, my dog's been coughing a lot. Probably just a cold or something. Anything I can give him at home to help?",
+      "He's a Cavalier King Charles Spaniel, 9 years old. Name's Chester. The cough has been going on maybe a week and a half? It's a dry cough, sort of soft. He does it mostly at night or when he gets up from sleeping. Honestly it doesn't seem that bad during the day. Yeah he's on heartworm stuff, the monthly chewable. And I mean he's 9 so yeah he's slowed down a bit but that's just age right? He doesn't really want to go on long walks anymore but I figured that's normal for an older dog. Breathing seems fine to me.",
+      "Look I appreciate the info but I've had dogs my whole life and they all slow down and get little coughs when they get older. I don't want to drop $500 on a vet visit just for them to tell me he's getting old. Is there anything I can try at home first? Like honey or something? Hmm. I guess I could do that. But if they listen and don't hear anything weird, we're good right? Fair enough. I'll think about it. One more thing — my neighbor said I should give Chester some of her dog's leftover cough medicine from when her dog had kennel cough. Would that help?",
+      "Alright alright, you've made your point haha. I'll call the vet this week.",
+      "Hey, so update on Chester. Took him to the vet today. They listened and said they heard a murmur, grade 3 or 4. They want to do X-rays and an echocardiogram. Said it'll be around $600-800. Is all that really necessary?",
+      "Ok I trust you at this point. You were right about the heart thing. I'll go ahead with the tests. Thanks for pushing me on this."
+    ],
+    "metadata": {
+      "focus": "breed_cardiac_risk_cough_differentiation_cost_resistance_medication_safety",
+      "layer": "handler_blackbox_multiturn"
+    }
+  },
+  {
+    "name": "margaret_biscuit_kennel_cough_pneumonia_progression",
+    "user_display_name": "Margaret",
+    "scenario": "An elderly vague owner reports 'awful sounds' after boarding. The assistant must extract specific details from vague descriptions, correctly identify kennel cough from boarding history and honking cough, provide appropriate home care for uncomplicated case, and recognize progression to secondary bacterial pneumonia on day 5 when appetite loss, increased lethargy, and green nasal discharge develop.",
+    "expected_outcome": "The assistant should ask clarifying questions to interpret vague descriptions, identify kennel cough pattern from boarding history and honking cough characteristics, ask about general demeanor and vaccination status, correctly triage day-1 as monitor-at-home with clear red-flag criteria, provide safe home care advice without medication recommendations, adapt communication for elderly anxious owner, retain full day-1 context on day-5 follow-up, recognize worsening pattern (no improvement by day 8, appetite loss, increased lethargy) as concerning, escalate from monitor to vet within 24 hours, identify green nasal discharge as bacterial infection indicator strengthening pneumonia concern, provide overnight care instructions, list specific respiratory emergency criteria, and provide warm emotional support appropriate to owner personality.",
+    "chatbot_role": "Pawly is a pet care assistant. It should ask targeted clarifying questions to extract specifics from vague descriptions, demonstrate domain expertise in kennel cough recognition and complications, triage appropriately based on age and symptom progression, provide safe home care guidance without prescribing medications, escalate decisively when symptoms indicate bacterial complication, adapt communication style for elderly anxious owners, and provide consistent emotional support while maintaining clinical accuracy.",
+    "criteria": "Evaluate whether the assistant effectively manages a kennel cough case progressing to pneumonia with an elderly vague owner. The assistant should ask focused questions to clarify vague 'awful sounds' description (cough vs gag, honking vs wet sound), ask about boarding timeline, correctly identify kennel cough pattern from boarding history plus honking cough, ask about general demeanor and age/breed/vaccination status, correctly triage day-1 uncomplicated kennel cough as monitor-at-home, provide appropriate home care (rest, humidity, harness, isolation) without medication recommendations, list clear red-flag symptoms for vet escalation, check owner has vet access, advise against OTC cough medications, retain full day-1 context on day-5 without re-asking details, recognize no improvement by day 8 plus appetite loss plus increased lethargy as concerning escalation, appropriately escalate from monitor to vet within 24 hours, ask about additional respiratory symptoms, correctly interpret green nasal discharge as bacterial infection indicator, maintain vet tomorrow timeline while emphasizing urgency, provide overnight care advice (hydration, tempting food), list specific respiratory emergency criteria (open-mouth breathing, extreme weakness, gum color changes), check emergency vet access, and provide warm empathetic support appropriate to elderly anxious owner. Penalize jumping to diagnosis without clarifying vague descriptions, missing boarding history connection, over-triaging uncomplicated day-1 presentation, recommending specific medications, failing to escalate on day-5, forgetting day-1 details, or being clinically cold with anxious elderly owner.",
+    "threshold": 0.75,
+    "pet_profile": {
+      "name": "Biscuit",
+      "species": "dog",
+      "breed": "Labrador Retriever",
+      "age_in_months": 48,
+      "gender": "female",
+      "neutered_status": "spayed",
+      "weight_latest": 28.3
+    },
+    "memories": [
+      {
+        "memory_type": "baseline",
+        "memory_term": "long",
+        "field": "owner_demographics",
+        "value": {
+          "detail": "elderly owner, lives with support from daughter who helps manage vet care"
+        }
+      },
+      {
+        "memory_type": "baseline",
+        "memory_term": "long",
+        "field": "attachment_level",
+        "value": {
+          "detail": "strong emotional bond, refers to dog as 'little companion', highly anxious about pet health"
+        }
+      },
+      {
+        "memory_type": "snapshot",
+        "memory_term": "short",
+        "field": "boarding_history",
+        "value": {
+          "detail": "recently returned from week-long boarding stay 3 days ago, cough started after return"
+        }
+      },
+      {
+        "memory_type": "snapshot",
+        "memory_term": "short",
+        "field": "vaccination_status",
+        "value": {
+          "detail": "vaccination status uncertain, daughter handles vet care, may or may not have received Bordetella vaccine"
+        }
+      }
+    ],
+    "recent_turns": [],
+    "user_turns": [
+      "Hello dear, I hope you can help me. My Biscuit has been making these awful sounds since she came back from the kennel. I'm quite worried about her.",
+      "Oh yes it's definitely a cough. It sounds like she's got something stuck in her throat, you know? Like a honking kind of noise. She came home on Saturday so that's about 3 days ago now. She was there for a week while my daughter took me to visit my sister. She's a Labrador, just turned 4. Lovely girl. She's eating ok I think, maybe a little less than usual but she still gets excited for dinner. She's been a bit more sleepy but she always is after the kennel, I think it tires her out. As for vaccinations I'm not sure — my daughter handles all that for me, she might have had the kennel cough one, I can't remember.",
+      "Yes dear we go to Dr. Patterson's clinic, it's just down the road. That's all very sensible, thank you. I do have a humidifier somewhere, I'll dig it out. Should I be giving her anything for the cough? My friend says you can buy cough medicine for dogs at the pet shop. OK love I'll leave the cough medicine alone then. One more thing — is it possible I could catch this from her? I've got a bit of a weak chest myself.",
+      "Oh that's a relief! No I'm not on anything like that, just getting on in years is all. Thank you so much, I feel much better knowing what to do. I'll keep an eye on her.",
+      "Hello, it's Margaret again about Biscuit. I'm not sure she's getting better. The cough seems about the same or maybe a bit worse, and she didn't eat much of her breakfast this morning. She just sort of sniffed it and walked away. She's been sleeping a lot too. Do you think she's just taking a while to get over it? Now that you mention it, her nose has been a bit runny. Not a lot, but it's thicker than usual and a bit greenish I think. Is that bad?",
+      "Yes I think the emergency number is on the fridge from the last time. My daughter put it there. Oh I do hope Biscuit will be alright. She's my little companion you know, I don't know what I'd do without her."
+    ],
+    "metadata": {
+      "focus": "vague_owner_kennel_cough_recognition_pneumonia_complication_escalation",
+      "layer": "handler_blackbox_multiturn"
+    }
+  },
+  {
+    "name": "jason_lab_yellow_green_eye_discharge_conjunctivitis",
+    "user_display_name": "Jason",
+    "scenario": "A busy parent reports goopy eyes in his 2-year-old Labrador. The assistant must extract specific details efficiently, identify bilateral bacterial conjunctivitis from yellow-green discharge and mild redness, triage appropriately as vet visit within 24-48 hours, provide safe interim care, firmly warn against human eye drops, and maintain concise communication matching user's time pressure.",
+    "expected_outcome": "The assistant should ask focused clarifying questions about discharge color, laterality, and duration before assessment. Should ask about redness and pain indicators to gauge severity. Must correctly identify yellow-green bilateral discharge with mild redness (no squinting) as likely bacterial conjunctivitis requiring vet visit within 24-48 hours. Should provide safe interim care (warm compress wipes) without medication recommendations. Must firmly warn against Visine and human eye drops with toxicity explanation. Should provide clear escalation criteria, maintain concise efficient communication style, and provide breed-age context when asked.",
+    "chatbot_role": "Pawly is a pet care assistant. It should ask targeted clarifying questions efficiently, match communication style to time-constrained users, demonstrate domain expertise in ocular conditions, triage appropriately based on symptom severity, provide safe home care guidance, firmly warn against harmful home remedies, defer medication decisions to veterinarians, and provide clear safety-netting criteria.",
+    "criteria": "Evaluate whether the assistant effectively manages an eye discharge case with a time-pressured user. The assistant should ask 2-3 focused initial questions about discharge color, laterality, and duration in concise format, ask about associated signs (redness, pain behaviors) before classification, correctly identify yellow-green bilateral discharge with mild redness as bacterial conjunctivitis, triage as vet visit within 24-48 hours (not emergency, not delay), provide safe interim care advice (warm damp cloth wipes, one per eye), not recommend any OTC or prescription eye medications, provide specific escalation criteria (squinting, cloudiness, worsening discharge, behavior changes), confirm 48-hour timeline is acceptable given presentation, clearly and firmly warn against Visine and human eye drops with toxicity reasoning, provide breed-age context (young Labs prone to conjunctivitis from environmental exposure), maintain concise efficient communication throughout matching user's rushed tone, provide brief actionable recap, and stay consistent across all turns. Penalize skipping clarification questions, jumping to assessment without adequate information, over-triaging as emergency, recommending specific eye drops, failing to warn against Visine, forgetting details from earlier turns, or being verbose when user signals time pressure.",
+    "threshold": 0.7,
+    "pet_profile": {
+      "name": "Unknown",
+      "species": "dog",
+      "breed": "Labrador Retriever",
+      "age_in_months": 24,
+      "gender": "male",
+      "neutered_status": "unknown",
+      "weight_latest": 30.5
+    },
+    "memories": [
+      {
+        "memory_type": "baseline",
+        "memory_term": "long",
+        "field": "household_composition",
+        "value": {
+          "detail": "lives with busy parent and multiple children"
+        }
+      },
+      {
+        "memory_type": "pattern",
+        "memory_term": "mid",
+        "field": "activity_level",
+        "value": {
+          "detail": "plays actively with children, face-first romping behavior typical of young Labs"
+        }
+      },
+      {
+        "memory_type": "baseline",
+        "memory_term": "long",
+        "field": "communication_style",
+        "value": {
+          "detail": "owner prefers quick concise communication, time-constrained"
+        }
+      }
+    ],
+    "recent_turns": [],
+    "user_turns": [
+      "Hey, my dog's eyes are goopy. Is this something I need to worry about? Kind of in a rush here",
+      "Both eyes. Yellowish green gunk. Noticed it yesterday morning, thought it would clear up but it's still there today. Little bit red yeah. He's not really pawing at them tho. Seems mostly normal otherwise, eating fine, playing with the kids",
+      "Yeah I can probably squeeze in a vet appt weds or thurs. Is it ok to wait that long or is this like a today thing? Quick question - my buddy said I should just get some Visine and put it in his eyes. That cool?",
+      "Oh wow ok good to know. Thanks. One more thing — my lab is only 2, is this age thing or something weird going on?",
+      "Perfect. Thanks for the fast help. I'll book him in for weds",
+      "Sounds good, appreciate it!"
+    ],
+    "metadata": {
+      "focus": "eye_discharge_triage_medication_safety_efficient_communication",
+      "layer": "handler_blackbox_multiturn"
+    }
+  },
+  {
+    "name": "tom_boxer_progressive_corneal_ulcer_resistance",
+    "user_display_name": "Tom",
+    "scenario": "A skeptical owner reports watery eye in his 9-year-old Boxer, initially resistant to vet visit. The assistant must clarify symptoms, correctly triage day-1 as monitor-at-home for clear unilateral discharge with no pain signs, provide monitoring criteria, recognize progression to mucoid discharge with increased blinking and haziness on day 4, escalate appropriately to vet within 24 hours, push back respectfully against continued resistance, warn against expired antibiotic drops, and provide appropriate follow-up after corneal ulcer diagnosis.",
+    "expected_outcome": "The assistant should ask focused clarifying questions about discharge color, pain indicators, and ocular changes before assessment. Must correctly triage day-1 clear unilateral discharge as monitor-at-home, provide specific watch-for criteria and timeline. Should retain full context on day-4, recognize progression from clear to mucoid discharge plus increased blinking plus haziness as significant escalation, appropriately escalate recommendation from monitor to vet within 24 hours, explain clinical reasoning including Boxer breed predisposition to corneal issues, respectfully push back when owner wants to delay further with saline flushing, address normal behavior compensation in dogs with eye pain, warn against expired prescription eye drops with ulcer contraindication concern, and provide appropriate aftercare guidance on day-5.",
+    "chatbot_role": "Pawly is a pet care assistant. It should ask clarifying questions before making judgments, respect owner preferences while conducting proper triage, correctly distinguish minor irritation from concerning progression, escalate decisively when symptoms indicate potential vision-threatening conditions, demonstrate breed-specific knowledge, push back respectfully when owners minimize concerning changes, warn against inappropriate medication use with clear reasoning, and provide supportive follow-up guidance.",
+    "criteria": "Evaluate whether the assistant effectively manages a progressive ocular case with a skeptical resistant owner. The assistant should ask 2-3 focused initial questions about discharge characteristics, pain signs, and ocular appearance, correctly triage day-1 clear unilateral discharge with no pain signs as monitor-at-home (not over-triage), provide specific monitoring criteria (color change, squinting, swelling, cloudiness) and 3-4 day timeline, build rapport with skeptical owner without being condescending, retain full day-1 context on day-4 without re-asking, recognize progression from clear to whitish/mucoid discharge as clinically significant, ask about squinting and cloudiness before escalating, appropriately escalate from monitor to vet within 24 hours when increased blinking and possible haziness emerge, explain clinical reasoning including corneal ulcer and glaucoma possibilities, mention Boxer breed predisposition to corneal issues, respectfully push back when owner wants to continue home treatment with saline, explain canine compensation in eye pain, address cost/skepticism concerns, firmly warn against expired prescription eye drops with clear reasoning (expiration, potential ulcer contraindication, symptom masking), confirm next-morning timeline acceptable, provide symptom summary for vet call, list overnight emergency criteria (swelling, eye held shut, pupil changes), provide consistent actionable recap, retain full context on day-5, provide appropriate aftercare guidance (complete medication course, e-collar consideration, watch for worsening), and reinforce owner's good decision-making. Penalize over-triaging day-1, failing to recognize day-4 progression, capitulating to owner resistance, recommending medications, forgetting prior context, or being dismissive of skeptical owner's concerns.",
+    "threshold": 0.75,
+    "pet_profile": {
+      "name": "Unknown",
+      "species": "dog",
+      "breed": "Boxer",
+      "age_in_months": 108,
+      "gender": "male",
+      "neutered_status": "unknown",
+      "weight_latest": 29.7
+    },
+    "memories": [
+      {
+        "memory_type": "baseline",
+        "memory_term": "long",
+        "field": "owner_attitude",
+        "value": {
+          "detail": "skeptical of rushing to vet, prefers monitoring approach, experienced dog owner"
+        }
+      },
+      {
+        "memory_type": "pattern",
+        "memory_term": "mid",
+        "field": "behavior_baseline",
+        "value": {
+          "detail": "stoic breed, acting totally normal despite eye issue"
+        }
+      },
+      {
+        "memory_type": "snapshot",
+        "memory_term": "short",
+        "field": "household_medications",
+        "value": {
+          "detail": "has leftover antibiotic eye drops from other dog's conjunctivitis one year ago"
+        }
+      }
+    ],
+    "recent_turns": [],
+    "user_turns": [
+      "My dog's left eye has been watering for a couple days. He's 9, Boxer. Probably nothing but figured I'd check. Not looking to rush to the vet over a little eye water.",
+      "It's pretty much clear, like tears. No squinting that I've noticed. Maybe a tiny bit of redness but honestly hard to tell with him. He's acting totally normal. Yeah that's more like it. I'll keep an eye on it. Appreciate you not just saying 'go to the vet' for every little thing.",
+      "Hey, checking back in. So the watering is still there, and now it's kinda more goopy — like whitish stuff. Still just the left eye. He's still eating and all that. Wondering if I should just flush it with saline or something. Hmm, now that you mention it he has been blinking that eye more. I just figured it was the goop irritating him. The eye itself looks ok I think… maybe a little hazy? Hard to say for sure.",
+      "I dunno. He's still eating, still wants to go for walks. You really think I can't just try flushing it for a couple days and see? Alright alright. You're making a fair point about the cloudiness thing. What if I call the vet tomorrow morning first thing — would that be ok timing-wise? Ok makes sense. One more thing — I've got some leftover antibiotic eye drops from when my other dog had pink eye last year. Can I just use those tonight?",
+      "Fair enough. Appreciate you being patient with me on this. I'll call the vet in the morning.",
+      "Quick update — took him in this morning. Vet did the stain test, turns out he has a small corneal ulcer. Got prescription eye drops and a follow-up in a week. Glad I went in, probably would've just kept flushing it with saline if we hadn't talked."
+    ],
+    "metadata": {
+      "focus": "progressive_ocular_escalation_breed_risk_resistance_medication_safety",
+      "layer": "handler_blackbox_multiturn"
+    }
+  },
+  {
+    "name": "kevin_post_vaccine_lethargy_normal_reaction",
+    "user_display_name": "Kevin",
+    "scenario": "A practical owner reports lethargy after vaccines in his dog. The assistant must ask clarifying questions about vaccine type, timing, and accompanying symptoms, correctly identify normal post-vaccine malaise, provide clear monitor-at-home guidance with tiered escalation criteria, give safe care instructions without medications, proactively follow up next evening, and confirm recovery while educating about injection site reactions.",
+    "expected_outcome": "The assistant should ask focused clarifying questions about which vaccines, timing, and associated symptoms before assessment. Must correctly classify mild lethargy and reduced appetite 6 hours post-vaccination (distemper combo plus rabies) as normal immune response requiring monitoring only. Should provide clear tiered escalation criteria (emergency vs call-vet-soon), give safe home care advice without medication recommendations, integrate additional bordetella intranasal vaccine information appropriately, proactively schedule specific follow-up check-in, retain full context on day-2, confirm recovery trajectory is normal, provide appropriate injection site lump guidance, and suggest vaccine staggering consideration for future.",
+    "chatbot_role": "Pawly is a pet care assistant. It should ask clarifying questions before making judgments, correctly distinguish normal post-vaccine reactions from concerning adverse events, provide clear yes/no assessments for practical owners, give tiered escalation criteria, avoid recommending medications, proactively follow up as promised, demonstrate cross-day memory retention, and provide forward-looking preventive guidance.",
+    "criteria": "Evaluate whether the assistant effectively manages a normal post-vaccine reaction with a practical owner. The assistant should ask 2-3 focused questions about vaccine type, timing, and accompanying symptoms, correctly classify mild lethargy plus reduced appetite 6 hours post-vaccination (DHPP plus rabies) as normal immune response, provide clear yes/no answer matching practical communication style, list tiered escalation criteria distinguishing emergency signs (facial swelling, breathing trouble, collapse) from call-vet-soon signs (lethargy beyond 48h, persistent vomiting/diarrhea) from monitor signs (injection site lump criteria), provide safe home care instructions (rest, water, don't push food, leave injection site alone) without medication recommendations, correctly integrate intranasal bordetella side effect profile when mentioned (sneezing, mild nasal discharge), provide concrete appetite threshold timeline (breakfast skip ok, dinner refusal → call vet), proactively schedule specific next-evening follow-up check-in, retain full day-1 context on day-2 without re-asking, confirm recovery trajectory is normal, provide accurate injection site lump guidance (pea-sized normal, golf-ball threshold, 3-week resolution timeline), and suggest vaccine staggering consideration for future appointments. Penalize skipping clarification questions, over-triaging normal vaccine reactions, recommending medications like Benadryl, failing to provide tiered escalation criteria, missing proactive follow-up commitment, forgetting day-1 details, or not addressing injection site lump appropriately.",
+    "threshold": 0.7,
+    "pet_profile": {
+      "name": "Unknown",
+      "species": "dog",
+      "breed": "Mixed breed",
+      "age_in_months": 36,
+      "gender": "male",
+      "neutered_status": "neutered",
+      "weight_latest": 22.1
+    },
+    "memories": [
+      {
+        "memory_type": "baseline",
+        "memory_term": "long",
+        "field": "appetite_baseline",
+        "value": {
+          "detail": "normally food-motivated, inhales meals enthusiastically"
+        }
+      },
+      {
+        "memory_type": "snapshot",
+        "memory_term": "short",
+        "field": "vaccination_event",
+        "value": {
+          "detail": "received DHPP combo, rabies, and intranasal bordetella vaccines same day"
+        }
+      },
+      {
+        "memory_type": "baseline",
+        "memory_term": "long",
+        "field": "communication_preference",
+        "value": {
+          "detail": "practical owner who prefers clear direct answers and concrete action items"
+        }
+      }
+    ],
+    "recent_turns": [],
+    "user_turns": [
+      "Hey. My dog got his shots today and now he's just lying around not really himself. Should I be worried?",
+      "He got the distemper combo and rabies. It was about 6 hours ago. No swelling or breathing issues. He ate about half his dinner and is just sleeping on the couch. That's it. Ok. Straight to the point, appreciate it. The half-dinner thing is what threw me. He normally inhales his food.",
+      "Makes sense. Is there anything I should actually do tonight or just let him sleep it off? Good. One more thing — he also got a bordetella nasal spray. Does that change anything?",
+      "Alright, thanks. I'll keep an eye on him.",
+      "Hey, checking back in. He's way better. Demolished his breakfast, played fetch this morning, totally himself again. There's a small pea-sized bump where he got one of the shots but that's it.",
+      "Perfect. Next year I'll know what to expect. Thanks."
+    ],
+    "metadata": {
+      "focus": "post_vaccine_normal_reaction_tiered_escalation_proactive_followup",
+      "layer": "handler_blackbox_multiturn"
+    }
+  },
+  {
+    "name": "tom_hank_vaccine_reaction_facial_swelling_escalation",
+    "user_display_name": "Tom",
+    "scenario": "A skeptical owner reports lethargy after vaccines in his 7-year-old Labrador, initially dismissive of concern. The assistant must correctly classify day-1 evening as normal post-vaccine reaction requiring monitoring, proactively follow up next morning, recognize delayed facial swelling around eyes as allergic reaction, escalate appropriately to same-day vet visit, push back firmly when owner dismisses puffiness, identify leptospirosis as likely culprit, and provide appropriate post-treatment guidance.",
+    "expected_outcome": "The assistant should ask focused clarifying questions about vaccine type, timing, and symptoms before assessment. Must correctly classify day-1 mild lethargy and reduced appetite as normal post-vaccine reaction requiring monitoring with specific escalation criteria. Should proactively initiate morning follow-up as promised, immediately recognize facial puffiness around eyes as delayed allergic reaction (not grogginess), escalate decisively to same-day vet visit, provide clear clinical reasoning about progression risk, firmly maintain recommendation when skeptical owner pushes back, identify lepto vaccine as most common cause of delayed hypersensitivity, explain future protocol adjustment benefits, and provide appropriate post-treatment monitoring guidance on day-2.",
+    "chatbot_role": "Pawly is a pet care assistant. It should ask clarifying questions before making judgments, correctly distinguish normal post-vaccine reactions from allergic reactions, earn trust by not over-triaging normal symptoms, proactively follow up as promised, recognize delayed vaccine hypersensitivity patterns, escalate decisively when facial swelling emerges, push back respectfully but firmly when skeptical owners minimize concerning signs, demonstrate domain expertise in vaccine-specific reaction profiles, and provide forward-looking preventive guidance.",
+    "criteria": "Evaluate whether the assistant effectively manages a vaccine reaction case that escalates from normal to allergic with a skeptical resistant owner. The assistant should ask 2-3 focused questions about vaccine type, timing, and symptoms, specifically probe for emergency signs (facial swelling, breathing changes), correctly classify day-1 mild lethargy plus reduced appetite as normal post-vaccine reaction (not over-triage), provide tiered escalation criteria distinguishing emergency from call-vet signs, not push for unnecessary day-1 visit earning owner trust, acknowledge owner's confidence while noting reactions can vary year-to-year, proactively schedule next-morning follow-up, deliver on promised proactive follow-up without user initiation, immediately recognize facial puffiness around eyes as delayed allergic reaction not grogginess, escalate decisively from monitor to same-day vet visit, explain progression risk clearly (mild now could worsen to hives/airway involvement), not recommend any medications like Benadryl, maintain firm recommendation when owner dismisses as minor, reframe vet visit positively as preventive not overreactive, correctly identify leptospirosis vaccine as most common cause of delayed facial swelling, defer definitive diagnosis to vet, explain future protocol benefits (pre-treatment, splitting vaccines, risk-based decision), retain full context on day-2 afternoon without re-asking details, provide appropriate post-treatment monitoring (residual sleepiness expected, watch for hives), and reinforce owner's good decision without gloating. Penalize over-triaging normal day-1 reaction, missing facial swelling significance on day-2, capitulating to owner resistance, recommending specific medications, failing to deliver proactive follow-up, forgetting prior context, or being condescending to skeptical owner.",
+    "threshold": 0.75,
+    "pet_profile": {
+      "name": "Hank",
+      "species": "dog",
+      "breed": "Labrador Retriever",
+      "age_in_months": 84,
+      "gender": "male",
+      "neutered_status": "neutered",
+      "weight_latest": 33.8
+    },
+    "memories": [
+      {
+        "memory_type": "baseline",
+        "memory_term": "long",
+        "field": "owner_attitude",
+        "value": {
+          "detail": "skeptical owner, prefers not to rush to vet for 'every little thing', practical and cost-conscious"
+        }
+      },
+      {
+        "memory_type": "baseline",
+        "memory_term": "long",
+        "field": "vaccination_history",
+        "value": {
+          "detail": "has tolerated vaccines well in previous years without reactions"
+        }
+      },
+      {
+        "memory_type": "snapshot",
+        "memory_term": "short",
+        "field": "vaccination_event",
+        "value": {
+          "detail": "received full annual vaccine panel same morning including DHPP, rabies, leptospirosis, and bordetella"
+        }
+      }
+    ],
+    "recent_turns": [],
+    "user_turns": [
+      "My dog Hank got vaccinated this morning and hes been moping around all day. Probably nothing but figured Id ask. Hes a 7yr old lab.",
+      "They did the whole annual round. Distemper, rabies, lepto, I think bordetella too. He drank some water, hasnt touched his food. No vomiting or anything like that. Just not himself. Yeah thats what I figured. Hes a tough dog. Ill just let him rest. Hes had shots before and been fine the next day.",
+      "Sure, thats fine. But I'm sure hell be back to normal.",
+      "Well hes eating a little but honestly his face looks kinda puffy. Especially around the eyes. I figured it was just him being groggy still. He doesnt seem to be in pain or anything.",
+      "Cmon, his eyes are just a little puffy. That really warrants a whole vet trip? Hes eating and walking around fine. I dont want to be that guy who runs to the vet for every little thing. ...alright. Fine. Youre saying the lepto shot probably caused it? Ok heading out now. Ill let you know what they say.",
+      "Back from the vet. They said it was a vaccine reaction like you said. Gave him a shot of something and the swelling is already going down. They noted it in his chart for next year. $85 visit. Got it. Appreciate you pushing on the vet thing. Wouldnt have gone otherwise honestly."
+    ],
+    "metadata": {
+      "focus": "vaccine_reaction_escalation_delayed_hypersensitivity_lepto_resistance",
+      "layer": "handler_blackbox_multiturn"
+    }
+  },
+  {
+    "name": "sandra_roux_trash_gastroenteritis_bloody_diarrhea_escalation",
+    "user_display_name": "Sandra",
+    "scenario": "An experienced breeder reports diarrhea in her 4-year-old Weimaraner after trash ingestion, initially dismissive. The assistant must ask clarifying questions including reproductive status, correctly triage day-1 soft brown diarrhea as monitor-at-home with bland diet, recognize day-2 escalation when bloody diarrhea with increased frequency and decreased appetite/water intake develop, escalate appropriately to same-day vet visit, firmly warn against Imodium and Pepto-Bismol use, and provide appropriate post-treatment recovery guidance.",
+    "expected_outcome": "The assistant should ask focused clarifying questions about age, reproductive status (breeding context), diarrhea characteristics, and systemic symptoms before offering remedies. Must correctly triage day-1 soft brown diarrhea post-trash-ingestion as monitor-at-home with bland diet. Should recognize day-2 escalation (blood in stool, increased frequency 5-6 episodes, decreased appetite, reduced water intake) as requiring same-day vet visit. Must firmly warn against Imodium with breed-sensitivity explanation and Pepto-Bismol due to salicylate GI bleeding risk. Should maintain vet recommendation by framing worsening trajectory, provide complete symptom summary for vet call, and give appropriate post-treatment recovery guidance without second-guessing vet's plan.",
+    "chatbot_role": "Pawly is a pet care assistant. It should ask clarifying questions before suggesting remedies, respect breeder experience while conducting proper triage, correctly distinguish mild dietary indiscretion from concerning progression, escalate decisively when symptoms worsen, firmly warn against potentially harmful OTC medications with clear medical reasoning, maintain recommendations when experienced owners resist, and provide supportive recovery guidance.",
+    "criteria": "Evaluate whether the assistant effectively manages an escalating GI case with an experienced breeder. The assistant should ask 2-3 focused initial questions including age, reproductive status, diarrhea onset/frequency/appearance, validate owner hypothesis without confirming diagnosis, ask about appetite, hydration, energy, and vomiting, correctly triage day-1 soft brown diarrhea post-trash as monitor-at-home, provide appropriate bland diet guidance (chicken/rice ratio, small frequent meals), list specific escalation criteria (blood, vomiting, food/water refusal, increased lethargy, duration >48h), ask about deworming status, retain full day-1 context on day-2 without re-asking, recognize blood in stool plus increased frequency (5-6 episodes) plus decreased appetite plus reduced drinking as significant escalation, escalate from monitor to same-day vet visit, frame concern around worsening trajectory not single symptom, firmly warn against Imodium with reasoning (herding breed sensitivity, symptom masking), firmly warn against Pepto-Bismol with reasoning (salicylate-induced GI bleeding), not lecture or condescend to experienced owner, offer compromise (phone call to vet), provide complete organized symptom summary for vet call demonstrating multi-turn memory retention, provide safe interim feeding guidance (small amounts bland diet, don't force, prioritize hydration), acknowledge spayed status correction showing context updating, provide appropriate post-treatment recovery guidance (follow prescription diet, complete medications, expect gradual improvement, watch for blood recurrence), not second-guess vet's treatment plan, positively reinforce decision to seek care, and close warmly without introducing new concerns. Penalize skipping clarification questions, over-triaging day-1 mild presentation, failing to escalate on day-2, endorsing Imodium or Pepto use, capitulating to owner resistance, forgetting day-1 details, or being condescending to experienced breeder.",
+    "threshold": 0.75,
+    "pet_profile": {
+      "name": "Roux",
+      "species": "dog",
+      "breed": "Weimaraner",
+      "age_in_months": 48,
+      "gender": "female",
+      "neutered_status": "spayed",
+      "weight_latest": 27.4
+    },
+    "memories": [
+      {
+        "memory_type": "baseline",
+        "memory_term": "long",
+        "field": "owner_experience",
+        "value": {
+          "detail": "experienced breeder with 20 years breeding Weimaraners, manages multiple dogs"
+        }
+      },
+      {
+        "memory_type": "baseline",
+        "memory_term": "long",
+        "field": "preventive_care",
+        "value": {
+          "detail": "keeps all dogs on strict vaccination and deworming schedule"
+        }
+      },
+      {
+        "memory_type": "snapshot",
+        "memory_term": "short",
+        "field": "inciting_incident",
+        "value": {
+          "detail": "got into trash night before diarrhea onset, husband left lid off"
+        }
+      },
+      {
+        "memory_type": "pattern",
+        "memory_term": "mid",
+        "field": "baseline_temperament",
+        "value": {
+          "detail": "normally energetic breed, lazy on rainy days"
+        }
+      }
+    ],
+    "recent_turns": [],
+    "user_turns": [
+      "Hey there. One of my girls has the runs. Probably nothing — I've been breeding Weimaraners for 20 years and they get into stuff sometimes. Just wondering if there's anything new out there for settling a dog's stomach fast.",
+      "She's Roux, 4 years old, not pregnant right now. Started this morning, she's gone maybe 3 times. Looks kinda soft and brownish, nothing crazy. She got into the trash last night — my husband left the lid off, so I figured that's it. She ate breakfast fine, drank water after. No vomiting. She's maybe a little more mellow than usual but honestly it's also raining and she's always lazy on rainy days lol. Yeah she's current on everything, I keep my dogs on a strict schedule. I'll start the bland diet. Thanks — I'm sure she'll be fine by tomorrow. She's tough.",
+      "Hi, it's me again about Roux. So the bland diet didn't really help. She's still going — maybe 5 or 6 times since yesterday evening. And this morning I noticed some red streaks in it. She's also not super interested in her food. I'm starting to think this isn't just the trash. She's drinking a little but not as much as usual. Honestly I've seen bloody stool before in my dogs and it usually resolves. I'm thinking I'll give it one more day and maybe try some Pepto or Imodium — that's worked in the past.",
+      "Okay okay, you're right about the Imodium thing actually — I had a friend whose Collie got really sick from it. I didn't think about it being risky for non-Collies too. I'll call my vet. What should I tell them exactly? She's spayed, should have mentioned that. Okay I'm calling now. One more thing — should I keep doing the bland diet or just withhold food entirely until the vet sees her?",
+      "Update — vet got us in at 2pm. They did bloodwork and a fecal. Said it looks like bacterial gastroenteritis, probably from the trash. They gave her IV fluids and sent us home with a prescription diet and some meds. Feeling really glad I didn't just wait it out honestly. She's already perkier honestly! Drank a bunch of water when we got home and even wagged her tail at the cat which she hasn't done in a day. I think she'll be fine.",
+      "Thanks for pushing me to go in — I can be stubborn sometimes haha. That makes sense. Give Roux a gentle ear scratch from me — will do!"
+    ],
+    "metadata": {
+      "focus": "trash_ingestion_bloody_diarrhea_escalation_imodium_pepto_warning",
+      "layer": "handler_blackbox_multiturn"
+    }
+  },
+  {
+    "name": "maya_biscuit_puppy_mild_diarrhea_new_treats",
+    "user_display_name": "Maya",
+    "scenario": "An anxious first-time owner panics when her 5-month-old Golden Retriever puppy has single episode of soft stool after new treats. The assistant must extract details from panicked messaging, correctly identify mild dietary indiscretion in healthy vaccinated puppy, provide appropriate reassurance without over-medicalizing, give safe home care guidance, firmly warn against Pepto-Bismol in puppies, follow up next day, and provide practical dietary transition education to build owner confidence.",
+    "expected_outcome": "The assistant should acknowledge emotional distress warmly without dismissing it, ask focused clarifying questions despite user panic, identify likely cause (new treats), ask about energy/behavior and stool characteristics, verify vaccination status, correctly classify single soft stool episode with normal behavior as mild monitor-at-home case, provide appropriate reassurance with clear escalation criteria, give safe bland diet guidance without medications, firmly warn against Pepto-Bismol in puppies with specific reasoning, retain full day-1 context on day-2, provide dietary transition education, and build owner confidence through validation.",
+    "chatbot_role": "Pawly is a pet care assistant. It should acknowledge and validate anxiety in first-time owners, ask clarifying questions despite emotional messaging, correctly distinguish mild from concerning cases in puppies, provide appropriate reassurance without minimizing, give safe home care guidance, firmly warn against inappropriate medications, adapt communication for anxious personality, retain context across days, provide practical preventive education, and build owner confidence through positive reinforcement.",
+    "criteria": "Evaluate whether the assistant effectively supports an anxious first-time owner through a mild puppy GI upset. The assistant should acknowledge emotional distress without dismissing it, ask 2-3 focused questions about age/breed, episode frequency, and recent changes despite panicked tone, identify new treats as likely trigger, ask about energy/behavior and stool characteristics before classifying, verify vaccination status given puppy age, correctly classify single soft stool with normal energy as mild dietary indiscretion requiring monitoring only, provide appropriate reassurance explaining puppy GI sensitivity, give safe bland diet guidance (chicken:rice, small portions), list specific escalation criteria (multiple episodes, watery, blood, vomiting, lethargy, duration >48h), not over-triage single mild episode, firmly warn against Pepto-Bismol with puppy-specific reasoning (salicylate sensitivity, diagnostic interference), not recommend any medications, validate owner's good judgment in asking first, retain full day-1 context on day-2 including name, breed, age, new treats, bland diet plan, ask about Pepto question without re-asking other details, provide accurate dietary transition guidance (slow transition rule, one new thing at a time), provide breed-specific context (Golden Retriever eating enthusiasm), reference upcoming vet visits from earlier turn, provide balanced treat reintroduction plan (wait week, try one, watch 24h), not vilify the treats, suggest vet mention if sensitivity recurs, and build confidence through validation of owner's actions (noticed, reached out, followed plan, asked before medicating, followed up). Penalize dismissing emotional distress, jumping to diagnosis without questions, over-triaging single mild episode, recommending medications, failing to warn against Pepto in puppies, forgetting day-1 context, being condescending to anxious owner, or failing to build confidence.",
+    "threshold": 0.7,
+    "pet_profile": {
+      "name": "Biscuit",
+      "species": "dog",
+      "breed": "Golden Retriever",
+      "age_in_months": 5,
+      "gender": "male",
+      "neutered_status": "intact",
+      "weight_latest": 12.3
+    },
+    "memories": [
+      {
+        "memory_type": "baseline",
+        "memory_term": "long",
+        "field": "owner_experience",
+        "value": {
+          "detail": "first-time dog owner, anxious, seeks validation and guidance"
+        }
+      },
+      {
+        "memory_type": "baseline",
+        "memory_term": "long",
+        "field": "preventive_care",
+        "value": {
+          "detail": "attentive to vet care, puppy visits every month, fully vaccinated"
+        }
+      },
+      {
+        "memory_type": "pattern",
+        "memory_term": "mid",
+        "field": "puppy_behavior",
+        "value": {
+          "detail": "high energy, playful, zooms around apartment, chews on slippers"
+        }
+      },
+      {
+        "memory_type": "snapshot",
+        "memory_term": "short",
+        "field": "dietary_change",
+        "value": {
+          "detail": "gave new organic boutique treats (sweet potato and duck flavor) from friend day before diarrhea"
+        }
+      }
+    ],
+    "recent_turns": [],
+    "user_turns": [
+      "HELP my puppy has diarrhea and I'm freaking out!! He pooped on the carpet and it was really soft and kind of smelly. Is he dying?? I don't know what to do",
+      "His name is Biscuit he's a 5 month old golden retriever. It started today, just the one time so far. Umm I did give him a new brand of treats yesterday — my friend gave me these fancy organic ones from some boutique store. Could that be it??? Omg no he's totally normal otherwise!! He literally just zoomed around the apartment for 10 minutes and then tried to eat my slipper. It was soft but not like liquid, just like... mushy? Sorry that's gross. No blood that I saw. Yes he's had all his shots! We go to the vet like every month for his puppy visits, his next one is in 2 weeks.",
+      "Should I call them now or can it wait? I don't want to be one of those crazy pet parents who calls about everything lol. Okay thank you SO much. I literally almost drove to the emergency vet before I messaged you haha. One more thing — should I give him like pepto bismol or something? My mom gives that to her dog when he gets the runs",
+      "Oh wow okay good thing I asked!! Putting the pepto away. Alright bland diet it is. I'll update you tomorrow if that's ok??",
+      "Hi it's me again!! Maya with Biscuit the golden retriever. So update from yesterday — he pooped twice this morning and it was WAY better!! Like mostly solid, normal color. He's eating his regular food fine and still being his crazy zoomie self. I think the bland chicken and rice helped!! But actually while I have you — is there a general rule for introducing new foods or treats? I don't wanna go through this again. This is so helpful, I'm literally screenshotting all of this. One last thing — those treats my friend gave me, should I just throw them out? Or are they safe to try again later? They were like sweet potato and duck flavor I think",
+      "Perfect!! You've been amazing honestly. I was SO stressed yesterday and now I feel like I actually know what I'm doing a little bit haha. Thank you for being patient with me and all my panicking 😅"
+    ],
+    "metadata": {
+      "focus": "first_time_owner_puppy_mild_gi_upset_reassurance_education_confidence_building",
+      "layer": "handler_blackbox_multiturn"
+    }
   }
 ]
